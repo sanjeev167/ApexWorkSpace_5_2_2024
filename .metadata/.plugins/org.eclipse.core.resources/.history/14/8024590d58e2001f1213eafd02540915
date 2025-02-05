@@ -1,0 +1,22 @@
+package com.nus.util;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 03-Feb-2025<br>
+ * @Time: 11:07:50 pm<br>
+ * @Objective: <br>
+ */
+public class DateTimeFormatUtil {
+	
+	private Calendar calendar = Calendar.getInstance();
+
+    // Create a SimpleDateFormat object with the desired pattern
+    private SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy");
+
+    // Format the date and time
+    public String formattedDateTime = formatter.format(calendar.getTime())+"_" +calendar.AM_PM ;
+    
+}

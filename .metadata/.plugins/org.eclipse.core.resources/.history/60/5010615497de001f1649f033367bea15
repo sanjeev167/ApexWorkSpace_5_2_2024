@@ -1,0 +1,11 @@
+package com.nus.fileupload.service;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 30-Jan-2025<br>
+ * @Time: 4:48:08 am<br>
+ * @Objective: <br>
+ */
+public abstract class UploadFileAtServer {
+
+}

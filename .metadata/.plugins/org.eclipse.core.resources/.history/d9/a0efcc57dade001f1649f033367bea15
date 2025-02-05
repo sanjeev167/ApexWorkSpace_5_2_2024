@@ -1,0 +1,11 @@
+package com.nus.fileupload.ctrl;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 30-Jan-2025<br>
+ * @Time: 12:31:12 pm<br>
+ * @Objective: <br>
+ */
+public class FileTypeCtrl {
+
+}

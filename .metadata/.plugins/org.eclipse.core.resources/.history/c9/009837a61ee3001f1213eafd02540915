@@ -1,0 +1,76 @@
+package com.nus.base.model;
+
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 13-Jan-2025<br>
+ * @Time: 4:34:50 pm<br>
+ * @Objective: <br>
+ */
+public class BaseModel {
+
+	 @JsonIgnore
+	private Integer id;
+	 @JsonIgnore
+	private Date createdOn;
+	 @JsonIgnore
+	private Integer createdBy;
+	 @JsonIgnore
+	private Date modifiedOn;
+	 @JsonIgnore
+	private Integer modifiedBy;
+	 @JsonIgnore
+	private String activeC = "Y";
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Integer getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Integer createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Date getModifiedOn() {
+		return modifiedOn;
+	}
+
+	public void setModifiedOn(Date modifiedOn) {
+		this.modifiedOn = modifiedOn;
+	}
+
+	public Integer getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(Integer modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	public String getActiveC() {
+		return activeC;
+	}
+
+	public void setActiveC(String activeC) {
+		this.activeC = activeC;
+	}
+
+}

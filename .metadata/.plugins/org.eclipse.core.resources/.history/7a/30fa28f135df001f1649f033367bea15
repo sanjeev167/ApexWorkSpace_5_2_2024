@@ -1,0 +1,213 @@
+package com.nus.fileupload.service;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.nus.exception.DataIntegrityViolationException;
+import com.nus.fileupload.entities.FileReference;
+import com.nus.fileupload.entities.FileType;
+import com.nus.fileupload.entities.HprojectMonthlyPlcc;
+import com.nus.fileupload.entities.ProjectMonthlyPlcc;
+import com.nus.fileupload.loader.DataLoader;
+import com.nus.fileupload.model.FileUploadPayload;
+import com.nus.fileupload.repo.HprojectMonthlyPlccRepo;
+import com.nus.fileupload.repo.ProjectMonthlyPlccRepo;
+import com.nus.pvt.master.entities.ProjectCodeMstr;
+
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 25-Jan-2025<br>
+ * @Time: 7:06:24 pm<br>
+ * @Objective: <br>
+ */
+@Service
+public class ProjectMonthlyPlccServiceImpl implements ProjectMonthlyPlccService{
+
+    private final Logger logger = LoggerFactory.getLogger(ProjectMonthlyPlccServiceImpl.class);
+	
+	@Autowired
+	ProjectMonthlyPlccRepo projectMonthlyPlccRepo;
+	@Autowired
+	HprojectMonthlyPlccRepo hprojectMonthlyPlccRepo;
+	
+	@Autowired 
+    DataLoader dataLoader;
+	
+	@Autowired
+	FileStorageService fileStorageService;
+	
+	@Override
+	public List<ProjectMonthlyPlcc> readExcel(FileUploadPayload fileUploadPayload) throws IOException {
+		
+		
+		int totalRevenueAmountCellNo=14;// Double => Checked	
+		int marginAmountCellNo =28;// Double => Checked
+		int fteCellNo = 7; // Double
+		int projectCodeCellNo= 0; // String => Checked
+
+		List<ProjectMonthlyPlcc> projectMonthlyPlccList = new ArrayList<ProjectMonthlyPlcc>();
+		Workbook workbook = null;
+		String fileName = fileUploadPayload.getFile().getOriginalFilename();
+
+		if (fileName.substring(fileName.length() - 5, fileName.length()).equals(".xlsx")) {
+			InputStream excelInputStream = fileUploadPayload.getFile().getInputStream();
+			try {
+				workbook = WorkbookFactory.create(excelInputStream);
+				logger.info("Number of sheets: " + workbook.getNumberOfSheets());
+				workbook.forEach(sheet -> {
+					logger.info("Title of sheet => " + sheet.getSheetName());					
+					int index = 0;
+					ProjectMonthlyPlcc projectMonthlyPlcc;	ProjectCodeMstr projectCodeMstr;				
+					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
+						if (index++ == 0)
+							continue;
+						projectMonthlyPlcc = new ProjectMonthlyPlcc(fileUploadPayload.getMonth(), fileUploadPayload.getYear(), fileUploadPayload.getUserId(),"Y" );
+						
+						if (row.getCell(totalRevenueAmountCellNo) != null && row.getCell(totalRevenueAmountCellNo).getCellType() == CellType.NUMERIC) {
+							projectMonthlyPlcc.setTotalRevenueAmount(row.getCell(totalRevenueAmountCellNo).getNumericCellValue());							
+						}
+						
+						if (row.getCell(marginAmountCellNo) != null && row.getCell(marginAmountCellNo).getCellType() == CellType.NUMERIC) {
+							projectMonthlyPlcc.setMarginAmount(row.getCell(marginAmountCellNo).getNumericCellValue());
+						}
+						
+						if (row.getCell(fteCellNo) != null && row.getCell(fteCellNo).getCellType() == CellType.NUMERIC) {
+							projectMonthlyPlcc.setFte(row.getCell(fteCellNo).getNumericCellValue());
+						}
+						
+						if (row.getCell(projectCodeCellNo) != null && row.getCell(projectCodeCellNo).getCellType() == CellType.STRING) {
+							projectCodeMstr =dataLoader.getProjectCodeMstrMap().get(row.getCell(projectCodeCellNo).getStringCellValue().trim());
+							//System.out.println("Coming project code from excel = "+row.getCell(projectCodeCellNo).getStringCellValue().trim());
+							
+							projectMonthlyPlcc.setProjectCodeId(projectCodeMstr.getId());
+						}			
+						projectMonthlyPlccList.add(projectMonthlyPlcc);
+					}//End of for loop
+				});
+			} catch (EncryptedDocumentException | IOException e) {
+				logger.error(e.getMessage(), e);
+			} finally {
+				try {
+					if (workbook != null)
+						workbook.close();
+					if (excelInputStream != null)
+						excelInputStream.close();
+				} catch (IOException e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		}
+		return projectMonthlyPlccList;
+	}
+	
+	@Transactional
+	@Override
+	public List<ProjectMonthlyPlcc> saveExcel(List<ProjectMonthlyPlcc> projectMonthlyPlccList, FileUploadPayload fileUploadPayload ) throws DataIntegrityViolationException{
+		
+		List<ProjectMonthlyPlcc> savedProjectMonthlyPlcc = null;
+		FileType fileType = dataLoader.getFileTypeMap().get(fileUploadPayload.getFileTypeId());
+		fileUploadPayload.setFileType(fileType.getFileType());
+		String uploadeFileName = fileStorageService.storeFile(fileUploadPayload);
+		if(uploadeFileName!= null) {
+			try {
+			if(projectMonthlyPlccRepo.getAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear()).size()!=0) {				
+			projectMonthlyPlccRepo.moveRecordsFromMainTableToHistoryTable(fileUploadPayload.getMonth(), fileUploadPayload.getYear());			
+			projectMonthlyPlccRepo.deleteAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear());//Deleting from main table			    
+			}//End of records availability check
+			
+			//Saving file reference
+			fileUploadPayload.setFileServerPath(fileStorageService.getTargetLocation());
+			FileReference fileReference = fileStorageService.saveFileReference(fileUploadPayload);
+			
+			//Before saving, must update each record of the list with this file-reference-id.
+			List<ProjectMonthlyPlcc> updateProjectMonthlyPlccList = updateFileReferenceOfAllRecordsInList(fileReference.getId(),projectMonthlyPlccList);			
+			savedProjectMonthlyPlcc = projectMonthlyPlccRepo.saveAll(updateProjectMonthlyPlccList);			
+		    fileUploadPayload.setFileName(uploadeFileName);					    
+			}catch(Exception ex) {				
+				ex.printStackTrace();
+			}
+		}
+		return savedProjectMonthlyPlcc;
+	}
+
+	@Override
+	public boolean  moveAllRecordsFromMainToHistoryTable(int month, int year) {
+		boolean isMovedSuccessfully =true;
+		try {
+		List<ProjectMonthlyPlcc> fetchedProjectMonthlyPlccList  = projectMonthlyPlccRepo.getAllByMonthAndYear(month, year);	
+		System.out.println("fetchedProjectMonthlyPlccList size = "+fetchedProjectMonthlyPlccList.size());
+		if(fetchedProjectMonthlyPlccList.size()!=0) {		
+			
+			//ModelMapper modelMapper = new ModelMapper();	
+			List<HprojectMonthlyPlcc> fetchedHprojectMonthlyPlccList = new ArrayList<HprojectMonthlyPlcc>();
+			HprojectMonthlyPlcc hprojectMonthlyPlcc;
+			
+			for(ProjectMonthlyPlcc projectMonthlyPlcc :fetchedProjectMonthlyPlccList) {
+				
+			  // hprojectMonthlyPlcc = modelMapper.map(projectMonthlyPlcc, HprojectMonthlyPlcc.class);
+				
+			   hprojectMonthlyPlcc = new HprojectMonthlyPlcc();
+			  // hprojectMonthlyPlcc.setId(projectMonthlyPlcc.getId());
+			   hprojectMonthlyPlcc.setTotalRevenueAmount(projectMonthlyPlcc.getTotalRevenueAmount());
+			   hprojectMonthlyPlcc.setMarginAmount(projectMonthlyPlcc.getMarginAmount());
+			   hprojectMonthlyPlcc.setFte(projectMonthlyPlcc.getFte());
+			   hprojectMonthlyPlcc.setProjectCodeId(projectMonthlyPlcc.getProjectCodeId());
+			   hprojectMonthlyPlcc.setPlccMonth(projectMonthlyPlcc.getPlccMonth());
+			   hprojectMonthlyPlcc.setPlccYear(projectMonthlyPlcc.getPlccYear());
+			   hprojectMonthlyPlcc.setCreatedBy(projectMonthlyPlcc.getCreatedBy());			   
+			   hprojectMonthlyPlcc.setCreatedOn(projectMonthlyPlcc.getCreatedOn());			   
+			   hprojectMonthlyPlcc.setModifiedBy(projectMonthlyPlcc.getModifiedBy());
+			   hprojectMonthlyPlcc.setModifiedOn(projectMonthlyPlcc.getModifiedOn());
+			   hprojectMonthlyPlcc.setActiveC(projectMonthlyPlcc.getActiveC());
+			   hprojectMonthlyPlcc.setFileReferenceId(projectMonthlyPlcc.getFileReferenceId());  
+			   
+			   fetchedHprojectMonthlyPlccList.add(hprojectMonthlyPlcc);		
+			   
+			}
+			hprojectMonthlyPlccRepo.saveAll(fetchedHprojectMonthlyPlccList);//Saving in history table
+			
+			
+		}
+		}catch(Exception ex) {
+			isMovedSuccessfully =false;
+			ex.printStackTrace();
+		}
+		return isMovedSuccessfully;
+	}
+	@Override
+	public void generateExcel(HttpServletResponse response, String fileName) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private List<ProjectMonthlyPlcc> updateFileReferenceOfAllRecordsInList(int fileReferenceId, List<ProjectMonthlyPlcc> projectMonthlyPlccList) {		
+		for(ProjectMonthlyPlcc projectMonthlyPlcc:projectMonthlyPlccList) {
+			projectMonthlyPlcc.setFileReferenceId(fileReferenceId);
+		}		
+		return projectMonthlyPlccList;
+	}
+
+	
+	
+
+	
+
+}

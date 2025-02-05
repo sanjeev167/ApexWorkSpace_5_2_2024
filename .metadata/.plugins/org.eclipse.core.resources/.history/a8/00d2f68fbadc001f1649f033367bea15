@@ -1,0 +1,15 @@
+package com.nus.exception;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 27-Jan-2025<br>
+ * @Time: 7:51:41 pm<br>
+ * @Objective: <br>
+ */
+public class ExcelFileReadingException extends RuntimeException{	
+	private static final long serialVersionUID = 1L;
+	
+	public ExcelFileReadingException(String message) {
+	    super(String.format("Failed for [%s]: %s", message));
+	  }
+}

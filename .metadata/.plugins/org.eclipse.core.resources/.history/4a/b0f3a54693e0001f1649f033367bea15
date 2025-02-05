@@ -1,0 +1,15 @@
+package com.nus.fileupload.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.nus.fileupload.entities.HprojectMonthlyPlcc;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 01-Feb-2025<br>
+ * @Time: 5:23:46 pm<br>
+ * @Objective: <br>
+ */
+public interface HprojectMonthlyRrrrRepo extends JpaRepository<HprojectMonthlyRrrr, Integer>{
+
+}

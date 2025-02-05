@@ -1,0 +1,11 @@
+package com.nus.base;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 03-Feb-2025<br>
+ * @Time: 1:01:00 pm<br>
+ * @Objective: <br>
+ */
+public interface UserLoginBaseService {
+
+}

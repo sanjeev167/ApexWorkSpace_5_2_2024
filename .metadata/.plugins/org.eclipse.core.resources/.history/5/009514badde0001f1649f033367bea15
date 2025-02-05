@@ -1,0 +1,228 @@
+package com.nus.fileupload.service;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.nus.exception.DataIntegrityViolationException;
+import com.nus.fileupload.entities.FileReference;
+import com.nus.fileupload.entities.FileType;
+import com.nus.fileupload.entities.HprojectMonthlyResourceAttrition;
+import com.nus.fileupload.entities.HprojectMonthlyResourceUtilization;
+import com.nus.fileupload.entities.ProjectMonthlyResourceAttrition;
+import com.nus.fileupload.entities.ProjectMonthlyResourceUtilization;
+import com.nus.fileupload.loader.DataLoader;
+import com.nus.fileupload.model.FileUploadPayload;
+import com.nus.fileupload.repo.HprojectMonthlyResourceAttritionRepo;
+import com.nus.fileupload.repo.MonthlyAttritionRepo;
+import com.nus.pvt.master.entities.ProjectCodeMstr;
+
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ * @Author:SanjeevKumar<br>
+ * @Date:24-Jan-2025<br>
+ * @Time:10:52:56 pm<br>
+ * @Objective: <br>
+ * 
+ */
+
+@Service
+public class MonthlyAttritionServiceImpl implements MonthlyAttritionService {
+	
+	private final Logger logger = LoggerFactory.getLogger(MonthlyAttritionServiceImpl.class);
+	
+	@Autowired
+	MonthlyAttritionRepo monthlyAttritionRepo;
+	
+	@Autowired
+	HprojectMonthlyResourceAttritionRepo hprojectMonthlyResourceAttritionRepo;
+	
+	@Autowired 
+    DataLoader dataLoader;
+	
+	@Autowired
+	FileStorageService fileStorageService;
+	
+	@Override
+	public List<ProjectMonthlyResourceAttrition> readExcel(FileUploadPayload fileUploadPayload) throws IOException {		
+		
+		int empCodeCellNo = 0;// String => Checked
+		int attritionTypeCellNo=12;	//String => Checked	
+		//int attritionValueCellNo = 0;// not required. Double attritionValue; Calculation based column	
+		int projectCodeCellNo = 1;// String => Checked
+
+		List<ProjectMonthlyResourceAttrition> monthlyResourceAttritionListReadFromExcel = new ArrayList<ProjectMonthlyResourceAttrition>();
+		Workbook workbook = null;
+		String fileName = fileUploadPayload.getFile().getOriginalFilename();
+
+		if (fileName.substring(fileName.length() - 5, fileName.length()).equals(".xlsx")) {
+			InputStream excelInputStream = fileUploadPayload.getFile().getInputStream();
+			try {
+				workbook = WorkbookFactory.create(excelInputStream);
+				logger.info("Number of sheets: " + workbook.getNumberOfSheets());
+				workbook.forEach(sheet -> {
+					logger.info("Title of sheet => " + sheet.getSheetName());					
+					int index = 0;
+					ProjectMonthlyResourceAttrition projectMonthlyResourceAttrition; ProjectCodeMstr projectCodeMstr;				
+					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
+						if (index++ == 0)
+							continue;
+						projectMonthlyResourceAttrition = new ProjectMonthlyResourceAttrition(fileUploadPayload.getMonth(), fileUploadPayload.getYear(), fileUploadPayload.getUserId(),new Date(),"Y" );
+						
+						if (row.getCell(empCodeCellNo) != null && row.getCell(empCodeCellNo).getCellType() == CellType.STRING) {
+							projectMonthlyResourceAttrition.setEmpCode(row.getCell(empCodeCellNo).getStringCellValue());
+						}
+						if (row.getCell(attritionTypeCellNo) != null && row.getCell(attritionTypeCellNo).getCellType() == CellType.STRING) {
+							projectMonthlyResourceAttrition.setAttritionType(row.getCell(attritionTypeCellNo).getStringCellValue());
+						}						
+						
+						if (row.getCell(projectCodeCellNo) != null && row.getCell(projectCodeCellNo).getCellType() == CellType.STRING) {
+							projectCodeMstr =dataLoader.getProjectCodeMstrMap().get(row.getCell(projectCodeCellNo).getStringCellValue().trim());
+							projectMonthlyResourceAttrition.setProjectCodeId(projectCodeMstr.getId());							
+						}
+						monthlyResourceAttritionListReadFromExcel.add(projectMonthlyResourceAttrition);
+					}//End of for loop
+				});
+			} catch (EncryptedDocumentException | IOException e) {
+				logger.error(e.getMessage(), e);
+			} finally {
+				try {
+					if (workbook != null)
+						workbook.close();
+					if (excelInputStream != null)
+						excelInputStream.close();
+				} catch (IOException e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		}
+		return monthlyResourceAttritionListReadFromExcel;
+	}//End of readExcel
+
+	@Override
+	public List<ProjectMonthlyResourceAttrition> saveExcel(List<ProjectMonthlyResourceAttrition> monthlyResourceAttritionListReadFromExcel,FileUploadPayload fileUploadPayload)throws DataIntegrityViolationException, IOException, Exception{
+		
+		List<ProjectMonthlyResourceAttrition> savedMonthlyResourceAttritionList = null;
+		FileType fileType = dataLoader.getFileTypeMap().get(fileUploadPayload.getFileTypeId());
+		fileUploadPayload.setFileType(fileType.getFileType());
+		String uploadedFileName = fileStorageService.storeFile(fileUploadPayload);
+		try {		
+		if(uploadedFileName!= null) {//Ensures that a file has been uploaded at server
+			//Saving file reference
+			fileUploadPayload.setFileServerPath(fileStorageService.getTargetLocation());
+			FileReference fileReference = fileStorageService.saveFileReference(fileUploadPayload);
+			fileUploadPayload.setFileName(uploadedFileName);			
+			//Before saving new record, must update each record of the list with this file-reference-id.
+			List<ProjectMonthlyResourceAttrition> updatedMonthlyResourceAttritionListReadFromExcel = updateFileReferenceOfAllRecordsInList(fileReference.getId(),monthlyResourceAttritionListReadFromExcel);			
+			//Start file movement				
+				List<ProjectMonthlyResourceAttrition> readExistingMonthlyResourceAttritionList = monthlyAttritionRepo.getAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear());	
+				if(readExistingMonthlyResourceAttritionList.size()!=0) {	//Check whether file movement is required or not				
+					savedMonthlyResourceAttritionList = moveFileFromMainToHistoryTable(readExistingMonthlyResourceAttritionList,updatedMonthlyResourceAttritionListReadFromExcel);
+			}//End of records availability check
+			else {//When no record is found in the main table, then insert this first time uploaded excel
+				savedMonthlyResourceAttritionList = monthlyAttritionRepo.saveAll(updatedMonthlyResourceAttritionListReadFromExcel);	
+			}
+		}}catch(Exception ex) {
+			fileStorageService.deleteFiles(fileStorageService.getTargetLocation());//If any exception is caught then the currently created file must be deleted.
+		    throw ex;
+		}
+		return savedMonthlyResourceAttritionList;
+	}
+
+	@Transactional
+	private List<ProjectMonthlyResourceAttrition> moveFileFromMainToHistoryTable(
+			List<ProjectMonthlyResourceAttrition> readExistingProjectMonthlyResourceAttritionList,
+			List<ProjectMonthlyResourceAttrition> updatedMonthlyResourceAttritionListReadFromExcel) {
+		
+		saveAllInHistoryTable(readExistingProjectMonthlyResourceAttritionList);				
+		monthlyAttritionRepo.saveAll(updatedMonthlyResourceAttritionListReadFromExcel);		
+		monthlyAttritionRepo.deleteAllInBatch(readExistingProjectMonthlyResourceAttritionList);//Deleting from the main table
+		return updatedMonthlyResourceAttritionListReadFromExcel;
+	}
+
+	private void saveAllInHistoryTable(List<ProjectMonthlyResourceAttrition> readExistingProjectMonthlyResourceAttritionList) {
+		
+		List<HprojectMonthlyResourceAttrition> preparedHprojectMonthlyResourceAttritionList = new ArrayList<HprojectMonthlyResourceAttrition>();
+		
+		HprojectMonthlyResourceAttrition hprojectMonthlyResourceAttrition;
+		
+		for(ProjectMonthlyResourceAttrition projectMonthlyResourceAttrition :readExistingProjectMonthlyResourceAttritionList) {			
+			hprojectMonthlyResourceAttrition = new HprojectMonthlyResourceAttrition();		
+			
+			hprojectMonthlyResourceAttrition.setEmpCode(projectMonthlyResourceAttrition.getEmpCode());
+			hprojectMonthlyResourceAttrition.setEmpStatus(projectMonthlyResourceAttrition.getEmpStatus());			
+			hprojectMonthlyResourceAttrition.setEmpName(projectMonthlyResourceAttrition.getEmpName());
+			hprojectMonthlyResourceAttrition.setDeptName(projectMonthlyResourceAttrition.getDeptName());			
+			hprojectMonthlyResourceAttrition.setDesignation(projectMonthlyResourceAttrition.getDesignation());			
+			hprojectMonthlyResourceAttrition.setDoj(projectMonthlyResourceAttrition.getDoj());
+			hprojectMonthlyResourceAttrition.setReportinManager(projectMonthlyResourceAttrition.getReportinManager());
+			
+			hprojectMonthlyResourceAttrition.setWorkLocation(projectMonthlyResourceAttrition.getWorkLocation());
+			hprojectMonthlyResourceAttrition.setEmployementStatus(projectMonthlyResourceAttrition.getEmployementStatus());
+			hprojectMonthlyResourceAttrition.setLwd(projectMonthlyResourceAttrition.getLwd());
+			hprojectMonthlyResourceAttrition.setUnit(projectMonthlyResourceAttrition.getUnit());
+			hprojectMonthlyResourceAttrition.setAttritionType(projectMonthlyResourceAttrition.getAttritionType());
+						
+			
+			hprojectMonthlyResourceAttrition.setProjectCodeId(projectMonthlyResourceAttrition.getProjectCodeId());			
+			hprojectMonthlyResourceAttrition.setResourceAttritionMonth(projectMonthlyResourceAttrition.getResourceAttritionMonth());
+			hprojectMonthlyResourceAttrition.setResourceAttritionYear(projectMonthlyResourceAttrition.getResourceAttritionYear());			
+			hprojectMonthlyResourceAttrition.setCreatedBy(projectMonthlyResourceAttrition.getCreatedBy());			   
+			hprojectMonthlyResourceAttrition.setCreatedOn(projectMonthlyResourceAttrition.getCreatedOn());			   
+			hprojectMonthlyResourceAttrition.setModifiedBy(projectMonthlyResourceAttrition.getModifiedBy());
+			hprojectMonthlyResourceAttrition.setModifiedOn(projectMonthlyResourceAttrition.getModifiedOn());
+			hprojectMonthlyResourceAttrition.setActiveC(projectMonthlyResourceAttrition.getActiveC());
+			hprojectMonthlyResourceAttrition.setFileReferenceId(projectMonthlyResourceAttrition.getFileReferenceId());  
+			   
+			preparedHprojectMonthlyResourceAttritionList.add(hprojectMonthlyResourceAttrition);   
+			}
+		hprojectMonthlyResourceAttritionRepo.saveAll(preparedHprojectMonthlyResourceAttritionList);//Saving in history table	
+		
+	}
+
+	private List<ProjectMonthlyResourceAttrition> updateFileReferenceOfAllRecordsInList(Integer fileReferenceId,
+			List<ProjectMonthlyResourceAttrition> monthlyResourceAttritionListReadFromExcel) {		
+		for(ProjectMonthlyResourceAttrition projectMonthlyResourceAttrition:monthlyResourceAttritionListReadFromExcel) {
+			projectMonthlyResourceAttrition.setFileReferenceId(fileReferenceId);
+		}		
+		return monthlyResourceAttritionListReadFromExcel;
+	}
+
+	@Override
+	public void generateExcel(HttpServletResponse response, String fileName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+
+	/*
+	 * if (row.getCell(1) != null) {
+	 * monthlyAttritionModel.setName(dataFormatter.formatCellValue(row.getCell(1)));
+	 * }
+	 */
+
+	/*
+	 * Cell dateCell = row.getCell(2); if (DateUtil.isCellDateFormatted(dateCell)) {
+	 * LocalDate date =
+	 * dateCell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault())
+	 * .toLocalDate(); monthlyAttritionModel.setDate(date); } if (row.getCell(4) !=
+	 * null && row.getCell(4).getCellType() == CellType.BOOLEAN) {
+	 * monthlyAttritionModel.setStatus(row.getCell(4).getBooleanCellValue()); }
+	 */
+
+}// End of MonthlyAttritionServiceImpl

@@ -1,0 +1,35 @@
+package com.nus.fileupload.model;
+
+import com.nus.api.struct.ApiHead;
+import com.nus.api.struct.ApiRequest;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 26-Jan-2025<br>
+ * @Time: 4:19:17 am<br>
+ * @Objective: <br>
+ */
+public class FileUploadResponse {
+
+	private String msg = "File received successfully";
+	
+	private ApiHead head;
+	private Object body;// Can hold ApiErrorView or  ApiResponseData object	
+	private ApiRequest meta;// Will hold meta data of api.
+
+	/**
+	 * @return the msg
+	 */
+	public String getMsg() {
+		return msg;
+	}
+
+	/**
+	 * @param msg the msg to set
+	 */
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+	
+	
+}

@@ -1,0 +1,98 @@
+package com.nus.sec.service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nus.sec.entities.ApexRole;
+import com.nus.sec.model.ApexRoleModel;
+import com.nus.sec.repo.ApexRoleRepository;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 13-Jan-2025<br>
+ * @Time: 9:53:36 pm<br>
+ * @Objective: <br>
+ */
+@Service
+public class ApexRoleServiceImpl implements ApexRoleService{
+
+	@Autowired
+	ApexRoleRepository apexRoleRepository;
+
+	@Override
+	public ApexRole addApexRole(ApexRoleModel apexRoleModel) {
+		ApexRole savedApexRoleEntity = null;
+		try {
+			ApexRole apexRoleEntity = new ApexRole();
+			apexRoleEntity.setRoleName(apexRoleModel.getRoleName());
+			apexRoleEntity.setCreatedOn(new Date());
+			// apexRoleEntity.setCreatedBy(0);//Will be implemented latter. FK needs to be adjusted
+			apexRoleEntity.setActiveC(apexRoleModel.getActiveC());
+			savedApexRoleEntity = apexRoleRepository.save(apexRoleEntity);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return savedApexRoleEntity;
+	}
+
+	@Override
+	public ApexRole updateApexRole(ApexRoleModel apexRoleModel) {
+		ApexRole apexRoleEntityToBeUpdated = null;
+		try {
+			Optional<ApexRole> apexRoleEntityWrapper = apexRoleRepository.findById(apexRoleModel.getId());
+			if (apexRoleEntityWrapper.isPresent()) {
+				apexRoleEntityToBeUpdated = apexRoleEntityWrapper.get();
+				apexRoleEntityToBeUpdated.setRoleName(apexRoleModel.getRoleName());
+				apexRoleEntityToBeUpdated.setModifiedOn(new Date());
+				// apiRoleEntityToBeUpdated.setModifiedBy(0);//Will be implemented latter. FK needs to be adjusted				
+				apexRoleRepository.save(apexRoleEntityToBeUpdated);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return apexRoleEntityToBeUpdated;
+	}
+
+	@Override
+	public boolean deleteApexRoleByRecordId(Integer recordId) {
+		boolean isRecordDeleted = true;
+		try {
+			apexRoleRepository.deleteById(recordId);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			isRecordDeleted = false;
+		}
+		return isRecordDeleted;
+
+	}
+
+	@Override
+	public ApexRole getApexRoleByRecordId(Integer recordId) {
+		ApexRole apexRoleEntityFetched = null;
+		try {
+			Optional<ApexRole> apexRoleEntityWrapper = apexRoleRepository.findById(recordId);
+			if (apexRoleEntityWrapper.isPresent())
+				apexRoleEntityFetched = apexRoleEntityWrapper.get();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return apexRoleEntityFetched;
+	}
+
+	@Override
+	public List<ApexRole> getAllApexRoles() {
+		List<ApexRole> apexRoleList = null;
+		try {
+			apexRoleList = apexRoleRepository.findAll();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return apexRoleList;
+
+	}
+
+}

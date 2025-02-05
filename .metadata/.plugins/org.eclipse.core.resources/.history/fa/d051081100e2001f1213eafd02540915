@@ -1,0 +1,22 @@
+package com.nus.pvt.master.service;
+
+import java.util.List;
+
+import com.nus.sec.entities.ApexRole;
+import com.nus.sec.model.ApexRoleModel;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 17-Jan-2025<br>
+ * @Time: 4:28:55 pm<br>
+ * @Objective: <br>
+ */
+public interface UserTypeService {
+	
+	public UserType addUserType(UserTypeModel userTypeModel);
+	public ApexRole updateApexRole(ApexRoleModel apexRoleModel);
+	public boolean deleteApexRoleByRecordId(Integer recordId);
+	public ApexRole getApexRoleByRecordId(Integer recordId);
+	public List<ApexRole> getAllApexRoles();
+
+}

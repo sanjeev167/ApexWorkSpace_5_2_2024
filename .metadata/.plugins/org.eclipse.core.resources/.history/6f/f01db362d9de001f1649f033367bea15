@@ -1,0 +1,11 @@
+package com.nus.fileupload.service;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 30-Jan-2025<br>
+ * @Time: 12:30:06 pm<br>
+ * @Objective: <br>
+ */
+public class FileReferenceServiceImpl implements FileReferenceService{
+
+}

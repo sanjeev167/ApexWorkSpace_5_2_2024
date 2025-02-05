@@ -1,0 +1,33 @@
+package com.nus.fileupload.service;
+
+import java.util.List;
+
+import com.nus.fileupload.entities.FileReference;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 30-Jan-2025<br>
+ * @Time: 12:30:06 pm<br>
+ * @Objective: <br>
+ */
+public class FileReferenceServiceImpl implements FileReferenceService{
+
+	@Override
+	public boolean deleteFileReferenceByRecordId(Integer recordId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public FileReference getFileReferenceByRecordId(Integer recordId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<FileReference> getAllFileReference() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

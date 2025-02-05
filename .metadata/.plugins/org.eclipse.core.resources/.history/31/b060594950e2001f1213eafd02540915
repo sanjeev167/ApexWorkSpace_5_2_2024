@@ -1,0 +1,29 @@
+package com.nus.pvt.master.ctrl;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nus.base.ctrl.ApexBaseCtrl;
+import com.nus.pvt.master.service.FileTypeService;
+import com.nus.sec.service.ApexUserService;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 30-Jan-2025<br>
+ * @Time: 12:31:12 pm<br>
+ * @Objective: <br>
+ */
+@Validated
+@RestController
+@RequestMapping("/mstr/v1")
+public class FileTypeCtrl extends ApexBaseCtrl{
+	
+private final Logger logger = LoggerFactory.getLogger(FileTypeCtrl.class);
+
+	@Autowired
+	FileTypeService fileTypeService;
+}

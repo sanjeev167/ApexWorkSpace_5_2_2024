@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.nus.root</groupId>
+		<artifactId>ApexRoot</artifactId>
+		<version>0.0.0.0</version>
+	</parent>
+	<groupId>com.nus.main</groupId>
+	<artifactId>ApexMain</artifactId>
+	<name>ApexMain</name>
+	<description>This is main Apex project which includes all its children projects and report related code.</description>
+	<url />
+	<licenses>
+		<license />
+	</licenses>
+	<developers>
+		<developer />
+	</developers>
+	<scm>
+		<connection />
+		<developerConnection />
+		<tag />
+		<url />
+	</scm>
+	<properties>
+		<!-- The main class to started by executing java -jar -->
+		<start-class>com.nus.ApexMainApplication</start-class>
+	</properties>
+	<dependencies>
+
+		<dependency>
+			<groupId>com.nus.fileupload</groupId>
+			<artifactId>4ApexFileUpload</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>

@@ -1,0 +1,11 @@
+package com.nus.pvt.master.model;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 03-Feb-2025<br>
+ * @Time: 8:47:59 pm<br>
+ * @Objective: <br>
+ */
+public class ProjectCodeMstrModel {
+
+}

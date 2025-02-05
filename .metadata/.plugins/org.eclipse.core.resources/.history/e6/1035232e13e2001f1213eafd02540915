@@ -1,0 +1,18 @@
+package com.nus.pvt.master.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import com.nus.sec.entities.UserType;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 17-Jan-2025<br>
+ * @Time: 5:00:05 pm<br>
+ * @Objective: <br>
+ */
+@Repository
+public interface UserTypeRepo extends JpaRepository<UserType, Integer> {
+
+}

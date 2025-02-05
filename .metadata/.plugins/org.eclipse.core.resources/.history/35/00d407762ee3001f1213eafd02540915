@@ -1,0 +1,24 @@
+package com.nus.sec.service;
+
+import java.util.List;
+
+import com.nus.sec.entities.ApexGroupRole;
+import com.nus.sec.model.ApexGroupRoleModel;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 13-Jan-2025<br>
+ * @Time: 4:30:45 pm<br>
+ * @Objective: <br>
+ */
+public interface ApexGroupRoleService {
+	public ApexGroupRole addApexGroupRole(ApexGroupRoleModel apexGroupRoleModel);
+
+	public ApexGroupRole updateApexGroupRole(ApexGroupRoleModel apexGroupRoleModel);
+
+	public boolean deleteApexGroupRoleByRecordId(Integer recordId);
+
+	public ApexGroupRole getApexGroupRoleByRecordId(Integer recordId);
+
+	public List<ApexGroupRole> getAllApexGroupRoles();
+}//End of ApexGroupRoleService

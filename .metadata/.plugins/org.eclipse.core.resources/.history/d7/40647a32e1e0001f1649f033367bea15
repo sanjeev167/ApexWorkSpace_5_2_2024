@@ -1,0 +1,184 @@
+package com.nus.fileupload.service;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.nus.exception.DataIntegrityViolationException;
+import com.nus.fileupload.entities.FileReference;
+import com.nus.fileupload.entities.FileType;
+import com.nus.fileupload.entities.ProjectMonthlyResourceAllocation;
+import com.nus.fileupload.entities.ProjectMonthlyResourceUtilization;
+import com.nus.fileupload.loader.DataLoader;
+import com.nus.fileupload.model.FileUploadPayload;
+import com.nus.fileupload.repo.HprojectMonthlyResourceAllocationRepo;
+import com.nus.fileupload.repo.MonthlyResourceAllocationRepo;
+import com.nus.pvt.master.entities.ProjectCodeMstr;
+
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ * @Author:SanjeevKumar<br>
+ * @Date:24-Jan-2025<br>
+ * @Time:10:46:56 pm<br>
+ * @Objective: <br>
+ */
+@Service
+public class MonthlyResourceAllocationServiceImpl implements MonthlyResourceAllocationService{
+	private final Logger logger = LoggerFactory.getLogger(MonthlyResourceAllocationServiceImpl.class);
+	@Autowired
+	MonthlyResourceAllocationRepo monthlyResourceAllocationRepo;
+	
+	@Autowired
+	HprojectMonthlyResourceAllocationRepo hprojectMonthlyResourceAllocationRepo;
+	
+    @Autowired 
+    DataLoader dataLoader;
+    
+    @Autowired
+	FileStorageService fileStorageService;
+    
+	@Override
+	public List<ProjectMonthlyResourceAllocation> readExcel(FileUploadPayload fileUploadPayload) throws IOException {
+		
+		//Checked
+		
+		int projectCodeCellNo = 5;//String		
+		int empStatusCellValue = 2;//String
+		int allocationPercentageCellValue = 6;//Double		
+		int billingStatusCellValue = 16;//String
+		int empGradeCellValue = 33;//String
+
+		List<ProjectMonthlyResourceAllocation> monthlyResourceAllocationListReadFromExcel = new ArrayList<ProjectMonthlyResourceAllocation>();
+		Workbook workbook = null;
+		String fileName = fileUploadPayload.getFile().getOriginalFilename();	
+		
+		if (fileName.substring(fileName.length() - 5, fileName.length()).equals(".xlsx")) {
+			InputStream excelInputStream = fileUploadPayload.getFile().getInputStream();
+			try {
+				workbook = WorkbookFactory.create(excelInputStream);
+				logger.info("Number of sheets: " + workbook.getNumberOfSheets());
+				
+				workbook.forEach(sheet -> {
+					logger.info("Title of sheet => " + sheet.getSheetName());					
+					int index = 0;
+					ProjectCodeMstr projectCodeMstr;ProjectMonthlyResourceAllocation projectMonthlyResourceAllocation;
+					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
+						if (index++ == 0)
+							continue;
+						 projectMonthlyResourceAllocation = new ProjectMonthlyResourceAllocation(fileUploadPayload.getMonth(), fileUploadPayload.getYear(), fileUploadPayload.getUserId(),"Y" );
+						
+						if (row.getCell(projectCodeCellNo) != null && row.getCell(projectCodeCellNo).getCellType() == CellType.STRING) {
+							projectCodeMstr =dataLoader.getProjectCodeMstrMap().get(row.getCell(projectCodeCellNo).getStringCellValue().trim());							
+							projectMonthlyResourceAllocation.setProjectCodeId(projectCodeMstr.getId());
+						}						
+						
+						if (row.getCell(empStatusCellValue) != null && row.getCell(empStatusCellValue).getCellType() == CellType.STRING) {
+							projectMonthlyResourceAllocation.setEmpStatus(row.getCell(empStatusCellValue).getStringCellValue().trim());							
+						}
+						
+						if (row.getCell(allocationPercentageCellValue) != null && row.getCell(allocationPercentageCellValue).getCellType() == CellType.NUMERIC) {							
+							projectMonthlyResourceAllocation.setAllocationPercentage(row.getCell(allocationPercentageCellValue).getNumericCellValue());
+						}			
+						
+						if (row.getCell(billingStatusCellValue) != null && row.getCell(billingStatusCellValue).getCellType() == CellType.STRING) {
+							projectMonthlyResourceAllocation.setBillingStatus(row.getCell(billingStatusCellValue).getStringCellValue().trim());							
+						}
+						
+						if (row.getCell(empGradeCellValue) != null && row.getCell(empGradeCellValue).getCellType() == CellType.STRING) {
+							projectMonthlyResourceAllocation.setEmpGrade(row.getCell(empGradeCellValue).getStringCellValue().trim());							
+						}
+						
+						monthlyResourceAllocationListReadFromExcel.add(projectMonthlyResourceAllocation);
+					}//End of for loop
+				});
+			} catch (EncryptedDocumentException | IOException e) {
+				logger.error(e.getMessage(), e);
+			} finally {
+				try {
+					if (workbook != null)
+						workbook.close();
+					if (excelInputStream != null)
+						excelInputStream.close();
+				} catch (IOException e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		}
+		return monthlyResourceAllocationListReadFromExcel;
+	}
+
+	@Override
+	public List<ProjectMonthlyResourceAllocation> saveExcel(List<ProjectMonthlyResourceAllocation> monthlyResourceAllocationListReadFromExcel,FileUploadPayload fileUploadPayload)throws DataIntegrityViolationException, IOException, Exception {
+		List<ProjectMonthlyResourceAllocation> savedMonthlyResourceAllocation = null;		
+		FileType fileType = dataLoader.getFileTypeMap().get(fileUploadPayload.getFileTypeId());
+		fileUploadPayload.setFileType(fileType.getFileType());
+		String uploadedFileName = fileStorageService.storeFile(fileUploadPayload);
+		try {		
+		if(uploadedFileName!= null) {//Ensures that a file has been uploaded at server
+			//Saving file reference
+			fileUploadPayload.setFileServerPath(fileStorageService.getTargetLocation());
+			FileReference fileReference = fileStorageService.saveFileReference(fileUploadPayload);
+			fileUploadPayload.setFileName(uploadedFileName);			
+			//Before saving new record, must update each record of the list with this file-reference-id.
+			List<ProjectMonthlyResourceAllocation> updatedMonthlyResourceAllocationListReadFromExcel = updateFileReferenceOfAllRecordsInList(fileReference.getId(),monthlyResourceAllocationListReadFromExcel);			
+			//Start file movement				
+				List<ProjectMonthlyResourceAllocation> readExistingMonthlyResourceAllocationList = monthlyResourceAllocationRepo.getAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear());	
+				if(readExistingMonthlyResourceAllocationList.size()!=0) {	//Check whether file movement is required or not				
+					savedMonthlyResourceAllocation = moveFileFromMainToHistoryTable(readExistingMonthlyResourceAllocationList,updatedMonthlyResourceAllocationListReadFromExcel);
+			}//End of records availability check
+			else {//When no record is found in the main table, then insert this first time uploaded excel
+				savedMonthlyResourceAllocation = monthlyResourceAllocationRepo.saveAll(updatedMonthlyResourceAllocationListReadFromExcel);	
+			}
+		}}catch(Exception ex) {
+			fileStorageService.deleteFiles(fileStorageService.getTargetLocation());//If any exception is caught then the currently created file must be deleted.
+		    throw ex;
+		}
+		return savedMonthlyResourceAllocation;
+	}
+
+	@Transactional
+	private List<ProjectMonthlyResourceAllocation> moveFileFromMainToHistoryTable(
+			List<ProjectMonthlyResourceAllocation> readExistingMonthlyResourceAllocationList,
+			List<ProjectMonthlyResourceAllocation> updatedMonthlyResourceAllocationListReadFromExcel) {
+		
+		saveAllInHistoryTable(readExistingMonthlyResourceAllocationList);				
+		monthlyResourceAllocationRepo.saveAll(updatedMonthlyResourceAllocationListReadFromExcel);		
+		monthlyResourceAllocationRepo.deleteAllInBatch(readExistingMonthlyResourceAllocationList);//Deleting from the main table
+		return updatedMonthlyResourceAllocationListReadFromExcel;
+	}
+
+	private void saveAllInHistoryTable(
+			List<ProjectMonthlyResourceAllocation> readExistingMonthlyResourceAllocationList) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private List<ProjectMonthlyResourceAllocation> updateFileReferenceOfAllRecordsInList(Integer fileReferenceId,
+			List<ProjectMonthlyResourceAllocation> monthlyResourceAllocationListReadFromExcel) {
+		
+		for(ProjectMonthlyResourceAllocation projectMonthlyResourceAllocation:monthlyResourceAllocationListReadFromExcel) {
+			projectMonthlyResourceAllocation.setFileReferenceId(fileReferenceId);
+		}		
+		return monthlyResourceAllocationListReadFromExcel;
+	}
+
+	@Override
+	public void generateExcel(HttpServletResponse response, String fileName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}//End of MonthlyResourceAllocationServiceImpl

@@ -1,0 +1,157 @@
+package com.nus.fileupload.service;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nus.exception.DataIntegrityViolationException;
+import com.nus.fileupload.entities.FileReference;
+import com.nus.fileupload.entities.FileType;
+import com.nus.fileupload.entities.ProjectMonthlyPlcc;
+import com.nus.fileupload.entities.ProjectMonthlyRrrr;
+import com.nus.fileupload.loader.DataLoader;
+import com.nus.fileupload.model.FileUploadPayload;
+import com.nus.fileupload.repo.MonthlyRRRRepo;
+import com.nus.pvt.master.entities.ProjectCodeMstr;
+
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ * @Author:SanjeevKumar<br>
+ * @Date:24-Jan-2025<br>
+ * @Time:10:42:34 pm<br>
+ * @Objective: <br>
+ */
+@Service
+public class MonthlyRRRServiceImpl implements MonthlyRRRService{
+	private final Logger logger = LoggerFactory.getLogger(MonthlyRRRServiceImpl.class);
+	
+	@Autowired
+	MonthlyRRRRepo monthlyRRRRepo;
+	
+	@Autowired 
+    DataLoader dataLoader;
+	
+	@Autowired
+	FileStorageService fileStorageService;
+	
+
+	@Override
+	public List<ProjectMonthlyRrrr> readExcel(FileUploadPayload fileUploadPayload) throws IOException {
+		
+		int expectedRateCellNo = 5;// Double		
+		int projectCodeCellNo = 3; // String => checked
+
+		List<ProjectMonthlyRrrr> projectMonthlyRrrrList = new ArrayList<ProjectMonthlyRrrr>();
+		Workbook workbook = null;
+		String fileName = fileUploadPayload.getFile().getOriginalFilename();
+
+		if (fileName.substring(fileName.length() - 5, fileName.length()).equals(".xlsx")) {
+			InputStream excelInputStream = fileUploadPayload.getFile().getInputStream();
+			try {
+				workbook = WorkbookFactory.create(excelInputStream);
+				logger.info("Number of sheets: " + workbook.getNumberOfSheets());
+				workbook.forEach(sheet -> {
+					logger.info("Title of sheet => " + sheet.getSheetName());					
+					int index = 0;
+					ProjectMonthlyRrrr projectMonthlyRrrr;	ProjectCodeMstr projectCodeMstr;				
+					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
+						if (index++ == 0)
+							continue;
+						projectMonthlyRrrr = new ProjectMonthlyRrrr(fileUploadPayload.getMonth(), fileUploadPayload.getYear(), fileUploadPayload.getUserId(),"Y" );
+						
+						if (row.getCell(expectedRateCellNo) != null && row.getCell(expectedRateCellNo).getCellType() == CellType.NUMERIC) {
+							projectMonthlyRrrr.setExpectedRate(row.getCell(expectedRateCellNo).getNumericCellValue());							
+						}
+												
+						if (row.getCell(projectCodeCellNo) != null && row.getCell(projectCodeCellNo).getCellType() == CellType.STRING) {
+							projectCodeMstr =dataLoader.getProjectCodeMstrMap().get(row.getCell(projectCodeCellNo).getStringCellValue().trim());
+							System.out.println("Project code = > "+row.getCell(projectCodeCellNo).getStringCellValue().trim());
+							projectMonthlyRrrr.setProjectCodeId(projectCodeMstr.getId());
+						}
+						projectMonthlyRrrrList.add(projectMonthlyRrrr);
+					}//End of for loop
+				});
+			} catch (EncryptedDocumentException | IOException e) {
+				logger.error(e.getMessage(), e);
+			} finally {
+				try {
+					if (workbook != null)
+						workbook.close();
+					if (excelInputStream != null)
+						excelInputStream.close();
+				} catch (IOException e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		}
+		return projectMonthlyRrrrList;
+	}
+
+	
+
+	@Override
+	public void generateExcel(HttpServletResponse response, String fileName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<ProjectMonthlyRrrr> saveExcel(List<ProjectMonthlyRrrr> monthlyRRRRListReadFromExcel, FileUploadPayload fileUploadPayload) throws DataIntegrityViolationException, IOException, Exception {
+		
+		List<ProjectMonthlyRrrr> savedProjectMonthlyRrrr = null;
+		FileType fileType = dataLoader.getFileTypeMap().get(fileUploadPayload.getFileTypeId());
+		fileUploadPayload.setFileType(fileType.getFileType());
+		String uploadedFileName = fileStorageService.storeFile(fileUploadPayload);
+		try {		
+		if(uploadedFileName!= null) {//Ensures that a file has been uploaded at server
+			//Saving file reference
+			fileUploadPayload.setFileServerPath(fileStorageService.getTargetLocation());
+			FileReference fileReference = fileStorageService.saveFileReference(fileUploadPayload);
+			fileUploadPayload.setFileName(uploadedFileName);			
+			//Before saving, must update each record of the list with this file-reference-id.
+			List<ProjectMonthlyRrrr> updatedMonthlyRRRRListReadFromExcel = updateFileReferenceOfAllRecordsInList(fileReference.getId(),monthlyRRRRListReadFromExcel);			
+			//Start file movement				
+				List<ProjectMonthlyRrrr> readProjectMonthlyRrrrList = monthlyRRRRepo.getAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear());	
+				if(readProjectMonthlyRrrrList.size()!=0) {					
+					savedProjectMonthlyRrrr = moveFileFromMainToHistoryTable(readProjectMonthlyRrrrList,updatedMonthlyRRRRListReadFromExcel);
+			}//End of records availability check
+			else {//When no record is found in the main table, then insert this first time uploaded excel
+				savedProjectMonthlyRrrr = monthlyRRRRepo.saveAll(updatedMonthlyRRRRListReadFromExcel);	
+			}
+		}}catch(Exception ex) {
+			fileStorageService.deleteFiles(fileStorageService.getTargetLocation());//If any exception is caught then the currently created file must be deleted.
+		    throw ex;
+		}
+		return savedProjectMonthlyPlcc;
+	}
+
+
+
+	private List<ProjectMonthlyRrrr> moveFileFromMainToHistoryTable(List<ProjectMonthlyRrrr> readProjectMonthlyRrrrList,
+			List<ProjectMonthlyRrrr> updatedMonthlyRRRRListReadFromExcel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	private List<ProjectMonthlyRrrr> updateFileReferenceOfAllRecordsInList(Integer id,
+			List<ProjectMonthlyRrrr> monthlyRRRRListReadFromExcel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+}//End of MonthlyRRRService

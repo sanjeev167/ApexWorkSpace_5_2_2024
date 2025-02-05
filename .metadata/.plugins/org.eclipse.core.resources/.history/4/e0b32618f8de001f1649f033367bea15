@@ -1,0 +1,18 @@
+package com.nus.fileupload.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.nus.fileupload.entities.ProjectMonthlyPlcc;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 26-Jan-2025<br>
+ * @Time: 2:10:29 am<br>
+ * @Objective: <br>
+ */
+public interface ProjectMonthlyPlccRepo extends JpaRepository<ProjectMonthlyPlcc, Integer>{
+	@Query(value="DELETE FROM ProjectMonthlyPlcc WHERE plccMonth>=?1 and plccYear=?2")
+	void deleteByMonthAndYear(int month, int year);
+
+}

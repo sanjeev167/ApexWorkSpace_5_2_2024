@@ -1,0 +1,21 @@
+package com.nus.pvt.master.ctrl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nus.pvt.master.service.ProjectVerticalMstrService;
+import com.nus.sec.ctrl.ApexBaseCtrl;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 17-Jan-2025<br>
+ * @Time: 4:13:57 pm<br>
+ * @Objective: <br>
+ */
+@RestController
+public class ProjectVerticalMstrController extends ApexBaseCtrl {
+
+	@Autowired
+	ProjectVerticalMstrService projectVerticalMstrService;
+
+}

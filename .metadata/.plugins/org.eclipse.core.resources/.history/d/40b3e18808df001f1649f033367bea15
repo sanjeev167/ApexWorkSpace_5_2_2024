@@ -1,0 +1,11 @@
+package com.nus.fileupload.repo;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 30-Jan-2025<br>
+ * @Time: 6:13:27 pm<br>
+ * @Objective: <br>
+ */
+public interface HprojectMonthlyPlccRepo {
+
+}

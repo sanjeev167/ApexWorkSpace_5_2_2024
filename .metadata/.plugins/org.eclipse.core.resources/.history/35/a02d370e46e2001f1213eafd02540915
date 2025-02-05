@@ -1,0 +1,13 @@
+package com.nus.pvt.master.model;
+
+import com.nus.base.model.BaseModel;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 03-Feb-2025<br>
+ * @Time: 9:11:52 pm<br>
+ * @Objective: <br>
+ */
+public class ProjectTypeMstrModel extends BaseModel{
+
+}

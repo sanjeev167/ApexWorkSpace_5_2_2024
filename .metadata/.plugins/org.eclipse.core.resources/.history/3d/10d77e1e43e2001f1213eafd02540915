@@ -1,0 +1,96 @@
+package com.nus.pvt.master.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nus.base.service.UserLoginBaseService;
+import com.nus.pvt.master.entities.ProjectCodeMstr;
+import com.nus.pvt.master.model.ProjectCodeMstrModel;
+import com.nus.pvt.master.repo.ProjectCodeMstrRepo;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 17-Jan-2025<br>
+ * @Time: 4:33:15 pm<br>
+ * @Objective: <br>
+ */
+@Service
+public class ProjectCodeMstrServiceImpl extends UserLoginBaseService implements ProjectCodeMstrService {
+
+	@Autowired
+	ProjectCodeMstrRepo projectCodeMstrRepo;
+	
+	@Override
+	public ProjectCodeMstr addProjectCodeMstr(ProjectCodeMstrModel projectCodeMstrModel) {
+		ProjectCodeMstr savedProjectCodeMstrEntity = null;
+		try {
+			ProjectCodeMstr projectCodeMstrEntity = new ProjectCodeMstr();
+			projectCodeMstrEntity.setProjectCode(projectCodeMstrModel.getProjectCode());
+			projectCodeMstrEntity.setCreatedOn(currentDate);
+			projectCodeMstrEntity.setCreatedBy(getCurrentLoginUserId());
+			projectCodeMstrEntity.setActiveC("Y");
+			savedProjectCodeMstrEntity = projectCodeMstrRepo.save(projectCodeMstrEntity);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return savedProjectCodeMstrEntity;
+	}
+
+	@Override
+	public ProjectCodeMstr updateProjectCodeMstr(ProjectCodeMstrModel projectCodeMstrModel) {
+		ProjectCodeMstr ProjectCodeMstrEntityToBeUpdated = null;
+		try {
+			Optional<ProjectCodeMstr> projectCodeMstrEntityWrapper = projectCodeMstrRepo.findById(projectCodeMstrModel.getId());
+			if (projectCodeMstrEntityWrapper.isPresent()) {
+				projectCodeMstrEntityToBeUpdated = projectCodeMstrEntityWrapper.get();
+				ProjectCodeMstrEntityToBeUpdated.setProjectCodeMstr(ProjectCodeMstrModel.getProjectCodeMstr());								
+				ProjectCodeMstrEntityToBeUpdated.setModifiedOn(currentDate);
+				ProjectCodeMstrEntityToBeUpdated.setModifiedBy(getCurrentLoginUserId());				
+				ProjectCodeMstrRepo.save(ProjectCodeMstrEntityToBeUpdated);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return ProjectCodeMstrEntityToBeUpdated;
+	}
+
+	@Override
+	public boolean deleteProjectCodeMstrByRecordId(Integer recordId) {
+		boolean isRecordDeleted = true;
+		try {
+			ProjectCodeMstrRepo.deleteById(recordId);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			isRecordDeleted = false;
+		}
+		return isRecordDeleted;
+	}
+
+	@Override
+	public ProjectCodeMstr getProjectCodeMstrByRecordId(Integer recordId) {
+		ProjectCodeMstr ProjectCodeMstrEntityFetched = null;
+		try {
+			Optional<ProjectCodeMstr> ProjectCodeMstrEntityWrapper = ProjectCodeMstrRepo.findById(recordId);
+			if (ProjectCodeMstrEntityWrapper.isPresent())
+				ProjectCodeMstrEntityFetched = ProjectCodeMstrEntityWrapper.get();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return ProjectCodeMstrEntityFetched;
+	}
+
+	@Override
+	public List<ProjectCodeMstr> getAllProjectCodeMstrs() {
+		List<ProjectCodeMstr> ProjectCodeMstrList = null;
+		try {
+			ProjectCodeMstrList = ProjectCodeMstrRepo.findAll();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return ProjectCodeMstrList;
+	}
+	
+}

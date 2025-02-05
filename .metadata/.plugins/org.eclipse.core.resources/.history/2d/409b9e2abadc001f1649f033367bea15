@@ -1,0 +1,11 @@
+package com.nus.exception;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 27-Jan-2025<br>
+ * @Time: 7:51:41 pm<br>
+ * @Objective: <br>
+ */
+public class ExcelFileReadingException {
+
+}

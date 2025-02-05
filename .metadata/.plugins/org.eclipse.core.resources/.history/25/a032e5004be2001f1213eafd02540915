@@ -1,0 +1,11 @@
+package com.nus.pvt.master.service;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 03-Feb-2025<br>
+ * @Time: 9:51:46 pm<br>
+ * @Objective: <br>
+ */
+public class FileTypeServiceImpl {
+
+}

@@ -1,0 +1,13 @@
+package com.nus.pvt.admin.model;
+
+import com.nus.base.model.BaseModel;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 07-Feb-2025<br>
+ * @Time: 5:25:33 am<br>
+ * @Objective: <br>
+ */
+public class AssignPmProjectToDmModel extends BaseModel{
+
+}

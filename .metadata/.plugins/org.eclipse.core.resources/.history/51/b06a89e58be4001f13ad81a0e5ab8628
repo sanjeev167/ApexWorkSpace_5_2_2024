@@ -1,0 +1,11 @@
+package com.nus.fileupload.repo;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 06-Feb-2025<br>
+ * @Time: 6:41:04 pm<br>
+ * @Objective: <br>
+ */
+public interface UserAccountMstrUploadRepo {
+
+}

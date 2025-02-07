@@ -1,0 +1,53 @@
+package com.nus.pvt.admin.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.nus.base.service.UserLoginBaseService;
+import com.nus.pvt.admin.entities.AssignProjectToPm;
+import com.nus.pvt.admin.model.AssignProjectToPmModel;
+import com.nus.pvt.admin.repo.AssignProjectToPmRepo;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 17-Jan-2025<br>
+ * @Time: 4:42:10 pm<br>
+ * @Objective: <br>
+ */
+@Service
+public class AssignProjectToPmServiceImpl extends UserLoginBaseService implements AssignProjectToPmService {
+
+	@Autowired
+	AssignProjectToPmRepo assignProjectToPmRepo;
+
+	@Override
+	public AssignProjectToPm addAssignProjectToPm(AssignProjectToPmModel assignProjectToPmModel) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AssignProjectToPm updateAssignProjectToPm(AssignProjectToPmModel assignProjectToPmModel) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteAssignProjectToPmByRecordId(Integer recordId) throws Exception {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public AssignProjectToPm getAssignProjectToPmByRecordId(Integer recordId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<AssignProjectToPm> getAllAssignProjectToPms() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

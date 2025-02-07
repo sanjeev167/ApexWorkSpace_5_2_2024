@@ -8,23 +8,33 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="Utili"/>
-			<item value="util"/>
-			<item value="ProjectMonthlyResourceUtilization"/>
-			<item value="utili"/>
-			<item value="rrrr"/>
-			<item value="moveAllRecordsFromMainToHistoryTable"/>
-			<item value="createDirectories"/>
-			<item value="fileStorageLocation"/>
-			<item value="targetLocation"/>
-			<item value="csatClientMailInitiated"/>
-			<item value="fileReference"/>
-			<item value="fileReferenceId"/>
-			<item value="riskPriorityNumberCellNo"/>
-			<item value="jackson"/>
-			<item value="495"/>
+			<item value="userType"/>
+			<item value="@ManyToOne"/>
+			<item value="EAGER"/>
+			<item value="listOfApexUserGroup"/>
+			<item value="UserGrade"/>
+			<item value="userGrade"/>
+			<item value="listOfApexUser"/>
+			<item value="UserType"/>
+			<item value="usertypes"/>
+			<item value="userTypeService"/>
+			<item value="type"/>
+			<item value="Type"/>
+			<item value="userTypeRepo"/>
+			<item value="AssignPmProjectToDm"/>
+			<item value="AssignProjectToPm"/>
 		</list>
 		<list key="replacehistory">
+			<item value="UserGrade"/>
+			<item value="userGrades"/>
+			<item value="userGradeService"/>
+			<item value="Grade"/>
+			<item value="userGradeRepo"/>
+			<item value="AssignDmProjectToPractice"/>
+			<item value="AssignPmProjectToDm"/>
+			<item value="assignProjectsToPm"/>
+			<item value="assignProjectToPmService"/>
+			<item value="AssignProjectToPm"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

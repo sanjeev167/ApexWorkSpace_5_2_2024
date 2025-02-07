@@ -1,0 +1,11 @@
+package com.nus.pvt.admin.model;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 07-Feb-2025<br>
+ * @Time: 6:02:13 am<br>
+ * @Objective: <br>
+ */
+public class AssignDmProjectToPracticeModel {
+
+}

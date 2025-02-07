@@ -1,0 +1,15 @@
+package com.nus.fileupload.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.nus.sec.entities.ApexUser;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 06-Feb-2025<br>
+ * @Time: 6:41:04 pm<br>
+ * @Objective: <br>
+ */
+public interface UserAccountMstrUploadRepo extends JpaRepository<ApexUser, Integer>{
+
+}

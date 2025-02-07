@@ -1,0 +1,109 @@
+package com.nus.pvt.admin.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nus.base.service.UserLoginBaseService;
+import com.nus.pvt.admin.entities.AssignDmProjectToPractice;
+import com.nus.pvt.admin.model.AssignDmProjectToPracticeModel;
+import com.nus.pvt.admin.repo.AssignDmProjectToPracticeRepo;
+import com.nus.pvt.admin.repo.AssignDmProjectToPracticeRepo;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 17-Jan-2025<br>
+ * @Time: 4:44:54 pm<br>
+ * @Objective: <br>
+ */
+@Service
+public class AssignDmProjectToPracticeServiceImpl extends UserLoginBaseService implements AssignDmProjectToPracticeService {
+
+	@Autowired
+	AssignDmProjectToPracticeRepo AssignDmProjectToPracticeRepo;
+
+	
+
+	@Override
+	public AssignDmProjectToPractice addAssignDmProjectToPractice(AssignDmProjectToPracticeModel AssignDmProjectToPracticeModel) throws Exception {
+		AssignDmProjectToPractice savedAssignDmProjectToPracticeEntity = null;
+		try {
+			AssignDmProjectToPractice AssignDmProjectToPracticeEntity = new AssignDmProjectToPractice();
+			
+			AssignDmProjectToPracticeEntity.setDmUserId(AssignDmProjectToPracticeModel.getUserId());
+			AssignDmProjectToPracticeEntity.setAssignedPmProjectId(AssignDmProjectToPracticeModel.getProjectAssignedToPmId());
+			AssignDmProjectToPracticeEntity.setAssignedOn(AssignDmProjectToPracticeModel.getAssignedOn());		
+			
+			AssignDmProjectToPracticeEntity.setCreatedOn(currentDate);
+			AssignDmProjectToPracticeEntity.setCreatedBy(getCurrentLoginUserId());
+			AssignDmProjectToPracticeEntity.setActiveC(activeC);
+			
+			savedAssignDmProjectToPracticeEntity = AssignDmProjectToPracticeRepo.save(AssignDmProjectToPracticeEntity);
+		} catch (Exception ex) {
+			throw ex;
+		}
+		return savedAssignDmProjectToPracticeEntity;
+	}
+
+	@Override
+	public AssignDmProjectToPractice updateAssignDmProjectToPractice(AssignDmProjectToPracticeModel AssignDmProjectToPracticeModel) throws Exception {
+		AssignDmProjectToPractice AssignDmProjectToPracticeEntityToBeUpdated = null;
+		try {
+			Optional<AssignDmProjectToPractice> AssignDmProjectToPracticeEntityWrapper = AssignDmProjectToPracticeRepo.findById(AssignDmProjectToPracticeModel.getId());
+			if (AssignDmProjectToPracticeEntityWrapper.isPresent()) {
+				AssignDmProjectToPracticeEntityToBeUpdated = AssignDmProjectToPracticeEntityWrapper.get();
+				
+				AssignDmProjectToPracticeEntityToBeUpdated.setDmUserId(AssignDmProjectToPracticeModel.getUserId());
+				AssignDmProjectToPracticeEntityToBeUpdated.setAssignedPmProjectId(AssignDmProjectToPracticeModel.getProjectAssignedToPmId());
+				AssignDmProjectToPracticeEntityToBeUpdated.setAssignedOn(AssignDmProjectToPracticeModel.getAssignedOn());	
+				
+				AssignDmProjectToPracticeEntityToBeUpdated.setModifiedOn(currentDate);
+				AssignDmProjectToPracticeEntityToBeUpdated.setModifiedBy(getCurrentLoginUserId());
+				
+				AssignDmProjectToPracticeRepo.save(AssignDmProjectToPracticeEntityToBeUpdated);
+			}
+		} catch (Exception ex) {
+			throw ex;
+		}
+		return AssignDmProjectToPracticeEntityToBeUpdated;
+	}
+
+	@Override
+	public boolean deleteAssignDmProjectToPracticeByRecordId(Integer recordId) throws Exception {
+		boolean isRecordDeleted = true;
+		try {
+			AssignDmProjectToPracticeRepo.deleteById(recordId);
+		} catch (Exception ex) {			
+			isRecordDeleted = false;
+			throw ex;
+		}
+		return isRecordDeleted;
+	}
+
+	@Override
+	public AssignDmProjectToPractice getAssignDmProjectToPracticeByRecordId(Integer recordId) throws Exception {
+		AssignDmProjectToPractice AssignDmProjectToPracticeEntityFetched = null;
+		try {
+			Optional<AssignDmProjectToPractice> AssignDmProjectToPracticeEntityWrapper = AssignDmProjectToPracticeRepo.findById(recordId);
+			if (AssignDmProjectToPracticeEntityWrapper.isPresent())
+				AssignDmProjectToPracticeEntityFetched = AssignDmProjectToPracticeEntityWrapper.get();
+		} catch (Exception ex) {
+			throw ex;
+		}
+		return AssignDmProjectToPracticeEntityFetched;
+	}
+
+	@Override
+	public List<AssignDmProjectToPractice> getAllAssignDmProjectToPractices() throws Exception {
+		List<AssignDmProjectToPractice> AssignDmProjectToPracticeList = null;
+		try {
+			AssignDmProjectToPracticeList = AssignDmProjectToPracticeRepo.findAllByActiveC(activeC);
+		} catch (Exception ex) {
+			throw ex;
+		}
+		return AssignDmProjectToPracticeList;
+	}
+	
+}

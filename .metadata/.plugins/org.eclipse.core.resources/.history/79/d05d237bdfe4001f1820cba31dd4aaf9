@@ -1,0 +1,23 @@
+package com.nus.pvt.admin.model;
+
+import java.util.Date;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 07-Feb-2025<br>
+ * @Time: 4:36:34 am<br>
+ * @Objective: <br>
+ */
+public class AssignProjectToPmModel {
+	
+	private int userTypeId;
+	private int userId;
+	private int clientAccountId;
+	private int projectCodeId;
+	private int projectVerticalId;
+	private int projectTypeId;
+	private Date assignedOn;
+	
+	
+
+}//End of AssignProjectToPmModel

@@ -1,0 +1,64 @@
+package com.nus.pub.ctrl;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import com.nus.api.struct.ApiResponse;
+import com.nus.base.ctrl.ApexBaseCtrl;
+import com.nus.exception.DataIntegrityViolationException;
+import com.nus.exception.ExcelFileReadingException;
+import com.nus.fileupload.model.FileUploadPayload;
+import com.nus.pvt.admin.entities.AssignProjectToPm;
+import com.nus.pvt.admin.model.AssignProjectToPmModel;
+import com.nus.sec.entities.ApexUser;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 08-Feb-2025<br>
+ * @Time: 11:44:41 am<br>
+ * @Objective: <br>
+ */
+@RestController
+@RequestMapping("/pub/v1")
+public class PmProjectReportCtrl extends ApexBaseCtrl{
+	
+	@Autowired
+	AssignProjectsForReportToPmService assignProjectToPmService;
+	
+	@RequestMapping("/pmReports")
+	@GetMapping
+    public ResponseEntity<ApiResponse> getPmReports( ) {  
+		
+	    List<AssignProjectToPmModel> assignProjectToPmList;
+		
+			try {
+				assignProjectToPmList = assignProjectToPmService.getPmReports();
+			
+			if(assignProjectToPmList!=null) {				
+				apiReq=makeApiMetaData();
+				apiReq.setPayLoad("");
+				//Return response in a pre-defined format	       	
+				apiResponse=makeSuccessResponse(assignProjectToPmList,apiReq);		
+				return ResponseEntity.ok().body(apiResponse);
+			}else {
+				throw new DataIntegrityViolationException("No UserAccount is added due to data intigrity violation.");
+			}	
+			} catch (Exception e) {
+				throw new NoResourceFoundException(null, "No project is assigned to him.");
+			}
+    }
+
+}

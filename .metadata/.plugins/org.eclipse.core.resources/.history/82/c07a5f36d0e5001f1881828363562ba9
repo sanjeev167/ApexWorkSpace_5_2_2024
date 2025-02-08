@@ -1,0 +1,998 @@
+Update date : Sat Feb 08 09:22:40 IST 2025
+ 
+ Table 'access_rights_rbac' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'page_id' : Comment changed to null
+ . Column 'page_id' updated
+ . Column 'role_id' : Comment changed to null
+ . Column 'role_id' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'access_rights_rbac' updated : 8 change(s)
+ 
+ Table 'apex_group' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'group_name' : Comment changed to null
+ . Column 'group_name' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'apex_group' updated : 7 change(s)
+ 
+ Table 'apex_group_role' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'apex_group_id' : Comment changed to null
+ . Column 'apex_group_id' updated
+ . Column 'apex_role_id' : Comment changed to null
+ . Column 'apex_role_id' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'apex_group_role' updated : 8 change(s)
+ 
+ Table 'apex_module_mstr' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'name' : Comment changed to null
+ . Column 'name' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'apex_module_mstr' updated : 7 change(s)
+ 
+ Table 'apex_refresh_token' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'refresh_token' : Comment changed to null
+ . Column 'refresh_token' updated
+ . Column 'expiry_date' : Comment changed to null
+ . Column 'expiry_date' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'user_id' : Comment changed to null
+ . Column 'user_id' updated
+ (*) table 'apex_refresh_token' updated : 5 change(s)
+ 
+ Table 'apex_role' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'role_name' : Comment changed to null
+ . Column 'role_name' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'apex_role' updated : 7 change(s)
+ 
+ Table 'apex_user' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'name' : Comment changed to null
+ . Column 'name' updated
+ . Column 'email' : Comment changed to null
+ . Column 'email' updated
+ . Column 'pwd' : Comment changed to null
+ . Column 'pwd' updated
+ . Column 'user_context' : Comment changed to null
+ . Column 'user_context' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'user_grade_id' : Comment changed to null
+ . Column 'user_grade_id' updated
+ . Column 'emp_code' : Comment changed to null
+ . Column 'emp_code' updated
+ (*) table 'apex_user' updated : 12 change(s)
+ 
+ Table 'apex_user_group' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'apex_user_id' : Comment changed to null
+ . Column 'apex_user_id' updated
+ . Column 'apex_group_id' : Comment changed to null
+ . Column 'apex_group_id' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'apex_user_group' updated : 8 change(s)
+ 
+ Table 'assign_dm_project_to_practice' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'assigned_dm_project_id' : Comment changed to null
+ . Column 'assigned_dm_project_id' updated
+ . Column 'practice_user_id' : Comment changed to null
+ . Column 'practice_user_id' updated
+ . Column 'assigned_on' : Comment changed to null
+ . Column 'assigned_on' updated
+ . Column 'released_on' : Comment changed to null
+ . Column 'released_on' updated
+ . Column 'closed_on' : Comment changed to null
+ . Column 'closed_on' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'assign_dm_project_to_practice' updated : 11 change(s)
+ 
+ Table 'assign_pm_project_to_dm' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'assigned_pm_project_id' : Comment changed to null
+ . Column 'assigned_pm_project_id' updated
+ . Column 'dm_user_id' : Comment changed to null
+ . Column 'dm_user_id' updated
+ . Column 'assigned_on' : Comment changed to null
+ . Column 'assigned_on' updated
+ . Column 'released_on' : Comment changed to null
+ . Column 'released_on' updated
+ . Column 'closed_on' : Comment changed to null
+ . Column 'closed_on' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'assign_pm_project_to_dm' updated : 11 change(s)
+ 
+ Table 'assign_practice_project_to_mgmt' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'assigned_project_practice_id' : Comment changed to null
+ . Column 'assigned_project_practice_id' updated
+ . Column 'management_user_id' : Comment changed to null
+ . Column 'management_user_id' updated
+ . Column 'assigned_on' : Comment changed to null
+ . Column 'assigned_on' updated
+ . Column 'released_on' : Comment changed to null
+ . Column 'released_on' updated
+ . Column 'closed_on' : Comment changed to null
+ . Column 'closed_on' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'assign_practice_project_to_mgmt' updated : 11 change(s)
+ 
+ Table 'assign_project_to_pm' found in repository
+ . Foreign key 'assign_project_to_pm_client_account_id_fkey' deleted
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'client_account_id' : Comment changed to null
+ . Column 'client_account_id' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'project_vertical_id' : Comment changed to null
+ . Column 'project_vertical_id' updated
+ . Column 'project_type_id' : Comment changed to null
+ . Column 'project_type_id' updated
+ . Column 'assigned_on' : Comment changed to null
+ . Column 'assigned_on' updated
+ . Column 'released_on' : Comment changed to null
+ . Column 'released_on' updated
+ . Column 'project_closed_on' : Comment changed to null
+ . Column 'project_closed_on' updated
+ . Column 'pm_user_id' : Comment changed to null
+ . Column 'pm_user_id' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Foreign key 'assign_project_to_pm_project_code_id_fkey' added
+ (*) table 'assign_project_to_pm' updated : 16 change(s)
+ 
+ Table 'client_account_mstr' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'client_account' : Comment changed to null
+ . Column 'client_account' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'client_account_mstr' updated : 7 change(s)
+ 
+ Table 'consolidated_delivery_risk' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'risk_type' : Comment changed to null
+ . Column 'risk_type' updated
+ . Column 'source' : Comment changed to null
+ . Column 'source' updated
+ . Column 'risk_main_category' : Comment changed to null
+ . Column 'risk_main_category' updated
+ . Column 'risk_sub_category' : Comment changed to null
+ . Column 'risk_sub_category' updated
+ . Column 'occuring_probablity' : Comment changed to null
+ . Column 'occuring_probablity' updated
+ . Column 'impact' : Comment changed to null
+ . Column 'impact' updated
+ . Column 'risk_priority_number' : Comment changed to null
+ . Column 'risk_priority_number' updated
+ . Column 'risk_exposure' : Comment changed to null
+ . Column 'risk_exposure' updated
+ . Column 'response_resolution_startegy' : Comment changed to null
+ . Column 'response_resolution_startegy' updated
+ . Column 'risk_owner' : Comment changed to null
+ . Column 'risk_owner' updated
+ . Column 'mitigation_plan' : Comment changed to null
+ . Column 'mitigation_plan' updated
+ . Column 'contigency_plan' : Comment changed to null
+ . Column 'contigency_plan' updated
+ . Column 'risk_status' : Comment changed to null
+ . Column 'risk_status' updated
+ . Column 'remark' : Comment changed to null
+ . Column 'remark' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'risk_for_month' : Comment changed to null
+ . Column 'risk_for_month' updated
+ . Column 'risk_for_year' : Comment changed to null
+ . Column 'risk_for_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'consolidated_delivery_risk' updated : 24 change(s)
+ 
+ Table 'customer_satisfaction' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'csat_due_date' : Comment changed to null
+ . Column 'csat_due_date' updated
+ . Column 'csat_client_mail_initiated' : Comment changed to null
+ . Column 'csat_client_mail_initiated' updated
+ . Column 'csat_received_date' : Comment changed to null
+ . Column 'csat_received_date' updated
+ . Column 'rating' : Comment changed to null
+ . Column 'rating' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'csat_month' : Comment changed to null
+ . Column 'csat_month' updated
+ . Column 'csat_year' : Comment changed to null
+ . Column 'csat_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'customer_satisfaction' updated : 14 change(s)
+ 
+ Table 'file_reference' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'file_name' : Comment changed to null
+ . Column 'file_name' updated
+ . Column 'file_type_id' : Comment changed to null
+ . Column 'file_type_id' updated
+ . Column 'file_path' : Comment changed to null
+ . Column 'file_path' updated
+ . Column 'file_month' : Comment changed to null
+ . Column 'file_month' updated
+ . Column 'file_year' : Comment changed to null
+ . Column 'file_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'file_reference' updated : 11 change(s)
+ 
+ Table 'file_type' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'file_type' : Comment changed to null
+ . Column 'file_type' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'file_type' updated : 7 change(s)
+ 
+ Table 'hconsolidated_delivery_risk' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'risk_type' : Comment changed to null
+ . Column 'risk_type' updated
+ . Column 'source' : Comment changed to null
+ . Column 'source' updated
+ . Column 'risk_main_category' : Comment changed to null
+ . Column 'risk_main_category' updated
+ . Column 'risk_sub_category' : Comment changed to null
+ . Column 'risk_sub_category' updated
+ . Column 'occuring_probablity' : Comment changed to null
+ . Column 'occuring_probablity' updated
+ . Column 'impact' : Comment changed to null
+ . Column 'impact' updated
+ . Column 'risk_priority_number' : Comment changed to null
+ . Column 'risk_priority_number' updated
+ . Column 'risk_exposure' : Comment changed to null
+ . Column 'risk_exposure' updated
+ . Column 'response_resolution_startegy' : Comment changed to null
+ . Column 'response_resolution_startegy' updated
+ . Column 'risk_owner' : Comment changed to null
+ . Column 'risk_owner' updated
+ . Column 'mitigation_plan' : Comment changed to null
+ . Column 'mitigation_plan' updated
+ . Column 'contigency_plan' : Comment changed to null
+ . Column 'contigency_plan' updated
+ . Column 'risk_status' : Comment changed to null
+ . Column 'risk_status' updated
+ . Column 'remark' : Comment changed to null
+ . Column 'remark' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'risk_for_month' : Comment changed to null
+ . Column 'risk_for_month' updated
+ . Column 'risk_for_year' : Comment changed to null
+ . Column 'risk_for_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'hconsolidated_delivery_risk' updated : 24 change(s)
+ 
+ Table 'hcustomer_satisfaction' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'csat_due_date' : Comment changed to null
+ . Column 'csat_due_date' updated
+ . Column 'csat_client_mail_initiated' : Comment changed to null
+ . Column 'csat_client_mail_initiated' updated
+ . Column 'csat_received_date' : Comment changed to null
+ . Column 'csat_received_date' updated
+ . Column 'rating' : Comment changed to null
+ . Column 'rating' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'csat_month' : Comment changed to null
+ . Column 'csat_month' updated
+ . Column 'csat_year' : Comment changed to null
+ . Column 'csat_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'hcustomer_satisfaction' updated : 14 change(s)
+ 
+ Table 'hproject_monthly_plcc' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'total_revenue_amount' : Comment changed to null
+ . Column 'total_revenue_amount' updated
+ . Column 'margin_amount' : Comment changed to null
+ . Column 'margin_amount' updated
+ . Column 'fte' : Comment changed to null
+ . Column 'fte' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'plcc_month' : Comment changed to null
+ . Column 'plcc_month' updated
+ . Column 'plcc_year' : Comment changed to null
+ . Column 'plcc_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'hproject_monthly_plcc' updated : 13 change(s)
+ 
+ Table 'hproject_monthly_resource_allocation' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'emp_status' : Comment changed to null
+ . Column 'emp_status' updated
+ . Column 'allocation_percentage' : Comment changed to null
+ . Column 'allocation_percentage' updated
+ . Column 'billing_status' : Comment changed to null
+ . Column 'billing_status' updated
+ . Column 'emp_grade' : Comment changed to null
+ . Column 'emp_grade' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'allocation_month' : Comment changed to null
+ . Column 'allocation_month' updated
+ . Column 'allocation_year' : Comment changed to null
+ . Column 'allocation_year' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'hproject_monthly_resource_allocation' updated : 14 change(s)
+ 
+ Table 'hproject_monthly_resource_attrition' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'emp_code' : Comment changed to null
+ . Column 'emp_code' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'emp_status' : Comment changed to null
+ . Column 'emp_status' updated
+ . Column 'emp_name' : Comment changed to null
+ . Column 'emp_name' updated
+ . Column 'dept_name' : Comment changed to null
+ . Column 'dept_name' updated
+ . Column 'designation' : Comment changed to null
+ . Column 'designation' updated
+ . Column 'doj' : Comment changed to null
+ . Column 'doj' updated
+ . Column 'reportin_manager' : Comment changed to null
+ . Column 'reportin_manager' updated
+ . Column 'work_location' : Comment changed to null
+ . Column 'work_location' updated
+ . Column 'employement_status' : Comment changed to null
+ . Column 'employement_status' updated
+ . Column 'lwd' : Comment changed to null
+ . Column 'lwd' updated
+ . Column 'unit' : Comment changed to null
+ . Column 'unit' updated
+ . Column 'attrition_type' : Comment changed to null
+ . Column 'attrition_type' updated
+ . Column 'resource_attrition_month' : Comment changed to null
+ . Column 'resource_attrition_month' updated
+ . Column 'resource_attrition_year' : Comment changed to null
+ . Column 'resource_attrition_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'hproject_monthly_resource_attrition' updated : 22 change(s)
+ 
+ Table 'hproject_monthly_resource_utilization' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'billed_days' : Comment changed to null
+ . Column 'billed_days' updated
+ . Column 'available_days' : Comment changed to null
+ . Column 'available_days' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'resource_utilization_month' : Comment changed to null
+ . Column 'resource_utilization_month' updated
+ . Column 'resource_utilization_year' : Comment changed to null
+ . Column 'resource_utilization_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'hproject_monthly_resource_utilization' updated : 12 change(s)
+ 
+ Table 'hproject_monthly_rrrr' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'expected_rate' : Comment changed to null
+ . Column 'expected_rate' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'rrrr_month' : Comment changed to null
+ . Column 'rrrr_month' updated
+ . Column 'rrrr_year' : Comment changed to null
+ . Column 'rrrr_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'hproject_monthly_rrrr' updated : 11 change(s)
+ 
+ Table 'menu_manager' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'parent_node_id' : Comment changed to null
+ . Column 'parent_node_id' updated
+ . Column 'node_name' : Comment changed to null
+ . Column 'node_name' updated
+ . Column 'node_type' : Comment changed to null
+ . Column 'node_type' updated
+ . Column 'tree_menu_type_id' : Comment changed to null
+ . Column 'tree_menu_type_id' updated
+ . Column 'img_url' : Comment changed to null
+ . Column 'img_url' updated
+ . Column 'page_id' : Comment changed to null
+ . Column 'page_id' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'updated_by' : Comment changed to null
+ . Column 'updated_by' updated
+ . Column 'updated_on' : Comment changed to null
+ . Column 'updated_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'menu_manager' updated : 12 change(s)
+ 
+ Table 'operation_access' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'access_rights_rbac_id' : Comment changed to null
+ . Column 'access_rights_rbac_id' updated
+ . Column 'operation_mstr_id' : Comment changed to null
+ . Column 'operation_mstr_id' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'operation_access' updated : 8 change(s)
+ 
+ Table 'operation_mstr' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'name' : Comment changed to null
+ . Column 'name' updated
+ . Column 'page_id' : Comment changed to null
+ . Column 'page_id' updated
+ . Column 'opurl' : Comment changed to null
+ . Column 'opurl' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'operation_mstr' updated : 9 change(s)
+ 
+ Table 'page_mstr' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'name' : Comment changed to null
+ . Column 'name' updated
+ . Column 'module_id' : Comment changed to null
+ . Column 'module_id' updated
+ . Column 'baseurl' : Comment changed to null
+ . Column 'baseurl' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'page_mstr' updated : 9 change(s)
+ 
+ Table 'project_code_mstr' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'project_code' : Comment changed to null
+ . Column 'project_code' updated
+ . Column 'project_name' : Comment changed to null
+ . Column 'project_name' updated
+ . Column 'client_account_id' : Comment changed to null
+ . Column 'client_account_id' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'project_code_mstr' updated : 9 change(s)
+ 
+ Table 'project_monthly_plcc' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'total_revenue_amount' : Comment changed to null
+ . Column 'total_revenue_amount' updated
+ . Column 'margin_amount' : Comment changed to null
+ . Column 'margin_amount' updated
+ . Column 'fte' : Comment changed to null
+ . Column 'fte' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'plcc_month' : Comment changed to null
+ . Column 'plcc_month' updated
+ . Column 'plcc_year' : Comment changed to null
+ . Column 'plcc_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'project_monthly_plcc' updated : 13 change(s)
+ 
+ Table 'project_monthly_resource_allocation' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'emp_status' : Comment changed to null
+ . Column 'emp_status' updated
+ . Column 'allocation_percentage' : Comment changed to null
+ . Column 'allocation_percentage' updated
+ . Column 'billing_status' : Comment changed to null
+ . Column 'billing_status' updated
+ . Column 'emp_grade' : Comment changed to null
+ . Column 'emp_grade' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'allocation_month' : Comment changed to null
+ . Column 'allocation_month' updated
+ . Column 'allocation_year' : Comment changed to null
+ . Column 'allocation_year' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'project_monthly_resource_allocation' updated : 14 change(s)
+ 
+ Table 'project_monthly_resource_attrition' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'emp_code' : Comment changed to null
+ . Column 'emp_code' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'emp_status' : Comment changed to null
+ . Column 'emp_status' updated
+ . Column 'emp_name' : Comment changed to null
+ . Column 'emp_name' updated
+ . Column 'dept_name' : Comment changed to null
+ . Column 'dept_name' updated
+ . Column 'designation' : Comment changed to null
+ . Column 'designation' updated
+ . Column 'doj' : Comment changed to null
+ . Column 'doj' updated
+ . Column 'reportin_manager' : Comment changed to null
+ . Column 'reportin_manager' updated
+ . Column 'work_location' : Comment changed to null
+ . Column 'work_location' updated
+ . Column 'employement_status' : Comment changed to null
+ . Column 'employement_status' updated
+ . Column 'lwd' : Comment changed to null
+ . Column 'lwd' updated
+ . Column 'unit' : Comment changed to null
+ . Column 'unit' updated
+ . Column 'attrition_type' : Comment changed to null
+ . Column 'attrition_type' updated
+ . Column 'resource_attrition_month' : Comment changed to null
+ . Column 'resource_attrition_month' updated
+ . Column 'resource_attrition_year' : Comment changed to null
+ . Column 'resource_attrition_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'project_monthly_resource_attrition' updated : 22 change(s)
+ 
+ Table 'project_monthly_resource_utilization' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'billed_days' : Comment changed to null
+ . Column 'billed_days' updated
+ . Column 'available_days' : Comment changed to null
+ . Column 'available_days' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'resource_utilization_month' : Comment changed to null
+ . Column 'resource_utilization_month' updated
+ . Column 'resource_utilization_year' : Comment changed to null
+ . Column 'resource_utilization_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'project_monthly_resource_utilization' updated : 12 change(s)
+ 
+ Table 'project_monthly_rrrr' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'expected_rate' : Comment changed to null
+ . Column 'expected_rate' updated
+ . Column 'project_code_id' : Comment changed to null
+ . Column 'project_code_id' updated
+ . Column 'rrrr_month' : Comment changed to null
+ . Column 'rrrr_month' updated
+ . Column 'rrrr_year' : Comment changed to null
+ . Column 'rrrr_year' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ . Column 'file_reference_id' : Comment changed to null
+ . Column 'file_reference_id' updated
+ (*) table 'project_monthly_rrrr' updated : 11 change(s)
+ 
+ Table 'project_type_mstr' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'project_type' : Comment changed to null
+ . Column 'project_type' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'project_type_mstr' updated : 7 change(s)
+ 
+ Table 'project_vertical_mstr' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'vertical_name' : Comment changed to null
+ . Column 'vertical_name' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'project_vertical_mstr' updated : 7 change(s)
+ 
+ Table 'role_hierarchy' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'head' : Comment changed to null
+ . Column 'head' updated
+ . Column 'contents' : Comment changed to null
+ . Column 'contents' updated
+ . Column 'role_id' : Comment changed to null
+ . Column 'role_id' updated
+ . Column 'parent_in_hierarchy_id' : Comment changed to null
+ . Column 'parent_in_hierarchy_id' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'role_hierarchy' updated : 10 change(s)
+ 
+ Table 'tree_menu_type_mstr' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'name' : Comment changed to null
+ . Column 'name' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'updated_by' : Comment changed to null
+ . Column 'updated_by' updated
+ . Column 'updated_on' : Comment changed to null
+ . Column 'updated_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'tree_menu_type_mstr' updated : 7 change(s)
+ 
+ Table 'user_grade' found in repository
+ . Column 'id' : Comment changed to null
+ . Column 'id' updated
+ . Column 'user_grade' : Comment changed to null
+ . Column 'user_grade' updated
+ . Column 'created_by' : Comment changed to null
+ . Column 'created_by' updated
+ . Column 'created_on' : Comment changed to null
+ . Column 'created_on' updated
+ . Column 'modified_by' : Comment changed to null
+ . Column 'modified_by' updated
+ . Column 'modified_on' : Comment changed to null
+ . Column 'modified_on' updated
+ . Column 'active_c' : Comment changed to null
+ . Column 'active_c' updated
+ (*) table 'user_grade' updated : 7 change(s)

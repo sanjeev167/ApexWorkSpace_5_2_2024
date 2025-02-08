@@ -1,0 +1,143 @@
+package com.nus.pvt.admin.model;
+
+import java.util.Date;
+
+import com.nus.base.model.BaseModel;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 07-Feb-2025<br>
+ * @Time: 4:36:34 am<br>
+ * @Objective: <br>
+ */
+public class AssignProjectToPmModel extends BaseModel{
+	
+	private int userGradeId;
+	private int userId;
+	private int clientAccountId;
+	private int projectCodeId;
+	private int projectVerticalId;
+	private int projectTypeId;
+	private Date assignedOn;
+	
+	private String clientAccount;
+	private String projectVertical;
+	private String projectCode;
+	private String projectName;
+	private String projectType;
+	private String userGrade;	
+	private String projectManagerName;
+	
+	
+	
+	
+	
+	
+	public AssignProjectToPmModel() {
+		super();
+		// TODO Auto-generated constructor stub
+	}	
+	
+	public AssignProjectToPmModel(int userGradeId, int userId, int clientAccountId, int projectCodeId,
+			int projectVerticalId, int projectTypeId, Date assignedOn) {
+		super();
+		this.userGradeId = userGradeId;
+		this.userId = userId;
+		this.clientAccountId = clientAccountId;
+		this.projectCodeId = projectCodeId;
+		this.projectVerticalId = projectVerticalId;
+		this.projectTypeId = projectTypeId;
+		this.assignedOn = assignedOn;
+	}
+	
+	/**
+	 * @return the userTypeId
+	 */
+	public int getUserGradeId() {
+		return userGradeId;
+	}
+	/**
+	 * @param userTypeId the userTypeId to set
+	 */
+	public void setUserGradeId(int userGradeId) {
+		this.userGradeId = userGradeId;
+	}
+	/**
+	 * @return the userId
+	 */
+	public int getUserId() {
+		return userId;
+	}
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	/**
+	 * @return the clientAccountId
+	 */
+	public int getClientAccountId() {
+		return clientAccountId;
+	}
+	/**
+	 * @param clientAccountId the clientAccountId to set
+	 */
+	public void setClientAccountId(int clientAccountId) {
+		this.clientAccountId = clientAccountId;
+	}
+	/**
+	 * @return the projectCodeId
+	 */
+	public int getProjectCodeId() {
+		return projectCodeId;
+	}
+	/**
+	 * @param projectCodeId the projectCodeId to set
+	 */
+	public void setProjectCodeId(int projectCodeId) {
+		this.projectCodeId = projectCodeId;
+	}
+	/**
+	 * @return the projectVerticalId
+	 */
+	public int getProjectVerticalId() {
+		return projectVerticalId;
+	}
+	/**
+	 * @param projectVerticalId the projectVerticalId to set
+	 */
+	public void setProjectVerticalId(int projectVerticalId) {
+		this.projectVerticalId = projectVerticalId;
+	}
+	/**
+	 * @return the projectTypeId
+	 */
+	public int getProjectTypeId() {
+		return projectTypeId;
+	}
+	/**
+	 * @param projectTypeId the projectTypeId to set
+	 */
+	public void setProjectTypeId(int projectTypeId) {
+		this.projectTypeId = projectTypeId;
+	}
+	/**
+	 * @return the assignedOn
+	 */
+	public Date getAssignedOn() {
+		return assignedOn;
+	}
+	/**
+	 * @param assignedOn the assignedOn to set
+	 */
+	public void setAssignedOn(Date assignedOn) {
+		this.assignedOn = assignedOn;
+	}
+	
+	
+	
+	
+	
+
+}//End of AssignProjectToPmModel

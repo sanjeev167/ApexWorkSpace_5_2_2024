@@ -3,3 +3,7 @@
 1738601866504	Move compilation unit
 1738601894297	Move compilation unit
 1738601922583	Move compilation units
+1738952509887	Rename type 'PmProjectAssignmentUpload'
+1738952688974	Delete element
+1738953794031	Rename type 'UploadAssignedProjectToPm'
+1738953812176	Rename type 'UploadAssignedProjectToPmImpl'

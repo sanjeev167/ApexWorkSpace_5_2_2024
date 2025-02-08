@@ -1,0 +1,31 @@
+package com.nus.pub.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.nus.base.service.UserLoginBaseService;
+import com.nus.pvt.admin.entities.AssignProjectToPm;
+import com.nus.pvt.admin.model.AssignProjectToPmModel;
+import com.nus.pvt.admin.repo.AssignProjectToPmRepo;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 08-Feb-2025<br>
+ * @Time: 4:01:12 pm<br>
+ * @Objective: <br>
+ */
+public class AssignProjectsForReportToPmServiceImpl extends UserLoginBaseService implements AssignProjectsForReportToPmService{
+
+	@Autowired
+	AssignProjectToPmRepo assignProjectToPmRepo;
+	
+	@Override
+	public List<AssignProjectToPmModel> getPmReports() {
+		List<AssignProjectToPm> assignProjectToPmList= assignProjectToPmRepo.findByPm(getCurrentLoginUserId(),activeC);
+		
+		
+		return null;
+	}
+
+}

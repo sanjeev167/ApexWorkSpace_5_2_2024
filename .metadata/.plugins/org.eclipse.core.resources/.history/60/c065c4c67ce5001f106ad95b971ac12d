@@ -1,0 +1,146 @@
+/**
+ * 
+ */
+package com.nus.fileupload.loader;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
+
+import com.nus.fileupload.entities.FileType;
+import com.nus.pvt.master.entities.ClientAccountMstr;
+import com.nus.pvt.master.entities.ProjectCodeMstr;
+import com.nus.pvt.master.entities.ProjectVerticalMstr;
+import com.nus.pvt.master.repo.ClientAccountMstrRepo;
+import com.nus.pvt.master.repo.FileTypeRepo;
+import com.nus.pvt.master.repo.ProjectCodeMstrRepo;
+import com.nus.pvt.master.repo.ProjectVerticalMstrRepo;
+import com.nus.pvt.master.repo.UserGradeRepo;
+import com.nus.sec.entities.UserGrade;
+
+/**
+ * @Author:SanjeevKumar<br>
+ * @Date:25-Jan-2025<br>
+ * @Time:13:44:48 pm<br>
+ * @Objective: <br>
+ */
+@Component
+public class DataLoader implements ApplicationRunner {
+
+	HashMap<String, ProjectCodeMstr> projectCodeMstrMap = new HashMap<String, ProjectCodeMstr>();
+	private final ProjectCodeMstrRepo projectCodeMstrRepo;
+	
+	private final UserGradeRepo userGradeRepo;
+	HashMap<String, UserGrade> userGradeMap = new HashMap<String, UserGrade>();
+	
+	
+	HashMap<Integer, FileType> fileTypeMap = new HashMap<Integer, FileType>();
+	private final FileTypeRepo fileTypeRepo;
+	
+	HashMap<String, ClientAccountMstr> clientAccountMstrMap = new HashMap<String, ClientAccountMstr>();
+	private final ClientAccountMstrRepo clientAccountMstrRepo;
+	
+	HashMap<String, ProjectVerticalMstr> projectVerticalMstrMap = new HashMap<String, ProjectVerticalMstr>();
+	private final ProjectVerticalMstrRepo projectVerticalMstrRepo;
+
+	public DataLoader(FileTypeRepo fileTypeRepo,ProjectCodeMstrRepo projectCodeMstrRepo,UserGradeRepo userGradeRepo,
+			ClientAccountMstrRepo clientAccountMstrRepo,ProjectVerticalMstrRepo projectVerticalMstrRepo) {
+		this.userGradeRepo = userGradeRepo;
+		this.fileTypeRepo = fileTypeRepo;
+		this.projectCodeMstrRepo = projectCodeMstrRepo;
+		this.clientAccountMstrRepo = clientAccountMstrRepo;
+		this.projectVerticalMstrRepo = projectVerticalMstrRepo;
+	}
+
+	@Override
+	public void run(ApplicationArguments args) throws Exception {
+		
+		List<ProjectCodeMstr> projectCodeMstrList = projectCodeMstrRepo.findAllByActiveC("Y");
+		Iterator<ProjectCodeMstr> projectCodeMstrIterator = projectCodeMstrList.iterator();
+		
+		while (projectCodeMstrIterator.hasNext()) {
+			ProjectCodeMstr projectCodeMstr = projectCodeMstrIterator.next();			
+			projectCodeMstrMap.put(projectCodeMstr.getProjectCode(), projectCodeMstr);
+		}
+		
+		List<FileType> fileTypeList = fileTypeRepo.findAllByActiveC("Y");
+		Iterator<FileType> fileTypeIterator = fileTypeList.iterator();
+		
+		while (fileTypeIterator.hasNext()) {
+			FileType fileType = fileTypeIterator.next();			
+			fileTypeMap.put(fileType.getId(), fileType);
+		}
+		
+		List<UserGrade> userGradeList = userGradeRepo.findAllByActiveC("Y");
+		Iterator<UserGrade> userGradeIterator = userGradeList.iterator();
+		
+		while (userGradeIterator.hasNext()) {
+			UserGrade userGrade = userGradeIterator.next();			
+			userGradeMap.put(userGrade.getUserGrade(), userGrade);
+		}	
+		
+		List<ClientAccountMstr> clientAccountMstrList = clientAccountMstrRepo.findAllByActiveC("Y");
+		Iterator<ClientAccountMstr> clientAccountMstrIterator = clientAccountMstrList.iterator();
+		
+		while (clientAccountMstrIterator.hasNext()) {
+			ClientAccountMstr clientAccountMstr = clientAccountMstrIterator.next();			
+			clientAccountMstrMap.put(clientAccountMstr.getClientAccount(), clientAccountMstr);
+		}	
+		
+		List<ProjectCodeMstr> projectCodeMstrList = projectCodeMstrRepo.findAllByActiveC("Y");
+		Iterator<ProjectCodeMstr> projectCodeMstrIterator = projectCodeMstrList.iterator();
+		
+		while (clientAccountMstrIterator.hasNext()) {
+			ClientAccountMstr clientAccountMstr = clientAccountMstrIterator.next();			
+			clientAccountMstrMap.put(clientAccountMstr.getClientAccount(), clientAccountMstr);
+		}	
+	}
+
+	/**projectVerticalMstrRepo
+	 * @return the 
+	 */
+	public HashMap<String, ProjectCodeMstr> getProjectCodeMstrMap() {
+		return projectCodeMstrMap;
+	}
+
+	/**
+	 * @param projectCodeMstrMap the projectCodeMstrMap to set
+	 */
+	public void setProjectCodeMstrMap(HashMap<String, ProjectCodeMstr> projectCodeMstrMap) {
+		this.projectCodeMstrMap = projectCodeMstrMap;
+	}
+
+	/**
+	 * @return the fileTypeMap
+	 */
+	public HashMap<Integer, FileType> getFileTypeMap() {
+		return fileTypeMap;
+	}
+
+	/**
+	 * @param fileTypeMap the fileTypeMap to set
+	 */
+	public void setFileTypeMap(HashMap<Integer, FileType> fileTypeMap) {
+		this.fileTypeMap = fileTypeMap;
+	}
+
+	/**
+	 * @return the userGradeMap
+	 */
+	public HashMap<String, UserGrade> getUserGradeMap() {
+		return userGradeMap;
+	}
+
+	/**
+	 * @param userGradeMap the userGradeMap to set
+	 */
+	public void setUserGradeMap(HashMap<String, UserGrade> userGradeMap) {
+		this.userGradeMap = userGradeMap;
+	}
+	
+	
+}

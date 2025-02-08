@@ -1,0 +1,16 @@
+package com.nus.pub.service;
+
+import java.util.List;
+
+import com.nus.pvt.admin.entities.AssignProjectToPm;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 08-Feb-2025<br>
+ * @Time: 4:01:01 pm<br>
+ * @Objective: <br>
+ */
+public interface AssignProjectToPmService {
+
+	public List<AssignProjectToPm> getPmReports();
+}

@@ -1,0 +1,30 @@
+package com.nus.util;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Formatter;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 03-Feb-2025<br>
+ * @Time: 11:07:50 pm<br>
+ * @Objective: <br>
+ */
+public class DateTimeFormatUtil {
+	// Create a SimpleDateFormat object with the desired pattern
+    private SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy");
+    Formatter formatter2 = new Formatter();
+    Formatter formatter3 = new Formatter();
+    Formatter formatter4 = new Formatter();
+	private Calendar calendar = Calendar.getInstance();
+	private Date currentTime = calendar.getTime();
+    // Format the date and time
+    public String formattedDateTime = formatter.format(currentTime)+ " "
+                                     +formatter2.format("%tl %1$Tp", calendar)+ " "
+    		                         +formatter3.format("%1$tM", calendar)+" Min"+ " "
+                                     +formatter4.format("%1$tS", calendar)+" Sec"; 
+   
+    
+    
+}

@@ -1,0 +1,59 @@
+package com.nus.pvt.reports.model;
+
+import com.nus.base.model.BaseModel;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 09-Feb-2025<br>
+ * @Time: 12:28:27 am<br>
+ * @Objective: <br>
+ */
+public class ReportDetail extends BaseModel{
+    
+	private String clientAccount;
+	private String projectVertical;
+	private String projectCode;
+	private String projectName;
+	private String projectType;
+	
+	
+	//Numeral data project-wise
+	private double tDFte;
+	private double tDRevenue;
+	private String tDPmPercentage;
+	private String tDUtilPercentage;
+	private String tDAttritionPercentage;
+	private double revenuePerFTE;
+	private double costPerFTE;
+	private double span_1;
+	private Integer spanRAGCalc;
+	private double span_2;	
+	private double projectCsatScore;
+	private double projectRiskScore;	
+	private double rrrrPotentialFTE;
+	private double rrrrPotentialRevenuePerMonth;
+	private String bgvRequired;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+}

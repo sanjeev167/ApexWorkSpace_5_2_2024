@@ -17,3 +17,13 @@
 1739012037819	Rename package 'com.nus.pub.service'
 1739012094516	Rename package 'com.nus.pvt.service'
 1739012105953	Move compilation unit
+1739041525591	Rename type 'FTE'
+1739041547856	Rename type 'Revenue'
+1739041845507	Rename type 'MonthRangeAttrition'
+1739042052774	Delete elements
+1739042093609	Rename type 'FromMonthToMonthYrReportModel'
+1739042306191	Rename type 'ReportModel'
+1739042339670	Rename type 'FMonthTMonthYrReportModel'
+1739042448827	Rename type 'ReportDetails'
+1739044359479	Rename type 'MonthRangeReport'
+1739044490115	Rename type 'ReportDetail'

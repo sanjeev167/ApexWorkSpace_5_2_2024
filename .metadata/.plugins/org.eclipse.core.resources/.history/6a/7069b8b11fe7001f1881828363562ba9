@@ -1,0 +1,11 @@
+package com.nus.pvt.admin.entities;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 10-Feb-2025<br>
+ * @Time: 1:21:11 am<br>
+ * @Objective: <br>
+ */
+public class AssignProjectToPmId {
+
+}

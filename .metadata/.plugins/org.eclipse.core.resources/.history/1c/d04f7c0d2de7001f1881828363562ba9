@@ -1,0 +1,55 @@
+package com.nus.pvt.reports.ctrl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.nus.api.struct.ApiResponse;
+import com.nus.base.ctrl.ApexBaseCtrl;
+import com.nus.exception.ResourceNotFoundException;
+import com.nus.pvt.reports.model.PMReportModel;
+import com.nus.pvt.reports.service.AssignProjectsForReportToPmService;
+import com.nus.util.DateTimeFormatUtil;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 08-Feb-2025<br>
+ * @Time: 11:44:41 am<br>
+ * @Objective: <br>
+ */
+@RestController
+@RequestMapping("/pvt/reports/v1")
+public class PmProjectReportCtrl extends ApexBaseCtrl{
+	
+	@Autowired
+	AssignProjectsForReportToPmService assignProjectsForReportToPmService;
+	
+	@RequestMapping("/pm")
+	@GetMapping
+    public ResponseEntity<ApiResponse> getPmReports(@Validated @RequestParam("fMonthYr") String fMonthYr,
+    		@RequestParam("tMonthYr") String tMonthYr ) throws Exception {  
+		
+		PMReportModel monthRangePMReport;		
+			try {
+				monthRangePMReport = assignProjectsForReportToPmService.getPmReports(fMonthYr,tMonthYr);
+			if(monthRangePMReport!=null) {				
+				apiReq=makeApiMetaData();
+				
+				apiReq.setPayLoad(DateTimeFormatUtil.getDateInMMYYYY(fMonthYr)+" to "
+				+DateTimeFormatUtil.getDateInMMYYYY(tMonthYr));
+				//Return response in a pre-defined format	       	
+				apiResponse=makeSuccessResponse(monthRangePMReport,apiReq);		
+				return ResponseEntity.ok().body(apiResponse);
+			}else {
+				throw new ResourceNotFoundException("No project is assigned to him.");
+			}	
+			} catch (Exception ex) {
+				throw ex;
+			}
+    }
+
+}

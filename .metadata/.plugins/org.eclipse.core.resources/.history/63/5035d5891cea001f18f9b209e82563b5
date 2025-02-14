@@ -1,0 +1,27 @@
+package com.nus.fileupload.repo;
+
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.nus.fileupload.entities.ProjectMonthlyPlcc;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 26-Jan-2025<br>
+ * @Time: 2:10:29 am<br>
+ * @Objective: <br>
+ */
+public interface ProjectMonthlyPlccRepo extends JpaRepository<ProjectMonthlyPlcc, Integer>{	
+	
+	@Query(value = "SELECT * FROM project_monthly_plcc WHERE plcc_month =?1 AND plcc_year =?2", nativeQuery = true)
+	List<ProjectMonthlyPlcc> getAllByMonthAndYear(int month, int year);
+
+	@Query(value = "SELECT * FROM project_monthly_plcc WHERE project_code_id =?1"
+			                                      + " AND plcc_month_year >=?2"
+			                                      + " AND plcc_month_year <=?3", nativeQuery = true)
+	List<ProjectMonthlyPlcc> getMonthlyPlccDataBetweenMonths(int projectCodeId, Date plccFMonthYear,Date plccTMonthYear);
+
+}

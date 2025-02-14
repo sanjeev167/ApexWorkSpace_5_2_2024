@@ -1,0 +1,11 @@
+package com.nus.pvt.reports.model;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 09-Feb-2025<br>
+ * @Time: 12:33:17 am<br>
+ * @Objective: <br>
+ */
+public class FTE {
+
+}

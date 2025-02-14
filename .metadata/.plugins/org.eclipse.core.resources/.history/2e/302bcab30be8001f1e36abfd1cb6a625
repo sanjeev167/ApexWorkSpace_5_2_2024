@@ -1,0 +1,21 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.nus.root</groupId>
+    <artifactId>ApexRoot</artifactId>
+    <version>0.0.0.0</version>
+  </parent>
+  <groupId>com.nus.sec</groupId>
+  <artifactId>2ApexSecurity</artifactId>
+  <name>2ApexSecurity</name>
+  <description>This is a security module which contains all the security related configuration.</description>
+  <dependencies>
+	<dependency>
+		<groupId>com.nus.util</groupId>
+        <artifactId>1ApexUtil</artifactId>
+        <version>${project.version}</version>	
+	</dependency>
+  </dependencies>
+
+
+</project>

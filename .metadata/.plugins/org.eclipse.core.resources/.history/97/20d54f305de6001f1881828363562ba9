@@ -1,0 +1,60 @@
+package com.nus.pvt.reports.service;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nus.base.service.UserLoginBaseService;
+import com.nus.pvt.admin.entities.AssignProjectToPm;
+import com.nus.pvt.admin.repo.AssignProjectToPmRepo;
+import com.nus.pvt.reports.model.MonthRangePMReport;
+import com.nus.pvt.reports.model.ProjectDetailReport;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 08-Feb-2025<br>
+ * @Time: 4:01:12 pm<br>
+ * @Objective: <br>
+ */
+@Service
+public class AssignProjectsForReportToPmServiceImpl extends UserLoginBaseService
+		implements AssignProjectsForReportToPmService {
+
+	@Autowired
+	AssignProjectToPmRepo assignProjectToPmRepo;
+
+	@Override
+	public MonthRangePMReport getPmReports(Date fMonthYr, Date tMonthYr) {
+		
+		MonthRangePMReport monthRangePMReport = null;
+		try {
+		List<AssignProjectToPm> assignProjectToPmList = assignProjectToPmRepo.findByPm(getCurrentLoginUserId(),activeC);		
+		
+		if(assignProjectToPmList.size()!=0) {
+			monthRangePMReport= new MonthRangePMReport();
+			monthRangePMReport.setPm(assignProjectToPmList.get(0).getApexUser3().getName());
+			monthRangePMReport.setAssignedon(new SimpleDateFormat("dd-MM-yyyy").format(assignProjectToPmList.get(0).getAssignedOn()));
+			monthRangePMReport.setEmpGrade(assignProjectToPmList.get(0).getApexUser3().getUserGrade().getUserGrade());
+		}
+		
+		ProjectDetailReport projectDetailReport;
+		for (AssignProjectToPm assignProjectToPm : assignProjectToPmList) {
+			projectDetailReport = new ProjectDetailReport();
+			projectDetailReport.setClientAccount(assignProjectToPm.getClientAccountMstr().getClientAccount());
+			projectDetailReport.setProjectVertical(assignProjectToPm.getProjectVerticalMstr().getVerticalName());
+			projectDetailReport.setProjectCode(assignProjectToPm.getProjectCodeMstr().getProjectCode());
+			projectDetailReport.setProjectName(assignProjectToPm.getProjectCodeMstr().getProjectName());
+			projectDetailReport.setProjectType(assignProjectToPm.getProjectTypeMstr().getProjectType());
+			
+			monthRangePMReport.getProjectDetailReportList().add(projectDetailReport);			
+		}
+		}catch(Exception ex) {
+			throw ex;
+		}
+		return monthRangePMReport;
+	}
+
+}

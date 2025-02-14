@@ -1,0 +1,68 @@
+package com.nus.pvt.reports.service;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nus.base.service.UserLoginBaseService;
+import com.nus.pvt.admin.entities.AssignProjectToPm;
+import com.nus.pvt.admin.repo.AssignProjectToPmRepo;
+import com.nus.pvt.reports.model.MonthRangePMReport;
+import com.nus.pvt.reports.model.ProjectDetailReport;
+import com.nus.util.DateTimeFormatUtil;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 08-Feb-2025<br>
+ * @Time: 4:01:12 pm<br>
+ * @Objective: <br>
+ */
+@Service
+public class AssignProjectsForReportToPmServiceImpl extends UserLoginBaseService
+		implements AssignProjectsForReportToPmService {
+
+	@Autowired
+	AssignProjectToPmRepo assignProjectToPmRepo;
+
+	@Override
+	public MonthRangePMReport getPmReports(String fMonthYr, String tMonthYr) throws Exception {
+		
+		MonthRangePMReport monthRangePMReport = null;
+		try {
+		List<AssignProjectToPm> assignProjectToPmList = assignProjectToPmRepo.findByPm(getCurrentLoginUserId(),activeC);		
+		
+		if(assignProjectToPmList.size()!=0) {
+			monthRangePMReport= new MonthRangePMReport();
+			monthRangePMReport.setPm(assignProjectToPmList.get(0).getApexUser3().getName());
+			monthRangePMReport.setEmpGrade(assignProjectToPmList.get(0).getApexUser3().getUserGrade().getUserGrade());
+			monthRangePMReport.setfMonthYr(DateTimeFormatUtil.getDateInMMYYYY(fMonthYr));			  
+			monthRangePMReport.settMonthYr(DateTimeFormatUtil.getDateInMMYYYY(tMonthYr));			
+			monthRangePMReport.setReportFor(DateTimeFormatUtil.monthsBetweenDates(fMonthYr, tMonthYr)+" - Month");
+		}
+		
+		ProjectDetailReport projectDetailReport;
+		for (AssignProjectToPm assignProjectToPm : assignProjectToPmList) {
+			projectDetailReport = new ProjectDetailReport();
+			projectDetailReport.setAssignedOn(new SimpleDateFormat("dd-MM-yyyy").format(assignProjectToPm.getAssignedOn()));
+			if(assignProjectToPm.getReleasedOn()!=null)
+			   projectDetailReport.setReleasedOn(new SimpleDateFormat("dd-MM-yyyy").format(assignProjectToPm.getReleasedOn()));
+			if(assignProjectToPm.getProjectClosedOn()!=null)
+			   projectDetailReport.setClosedOn(new SimpleDateFormat("dd-MM-yyyy").format(assignProjectToPm.getProjectClosedOn()));
+			
+			projectDetailReport.setClientAccount(assignProjectToPm.getClientAccountMstr().getClientAccount());
+			projectDetailReport.setProjectVertical(assignProjectToPm.getProjectVerticalMstr().getVerticalName());
+			projectDetailReport.setProjectCode(assignProjectToPm.getProjectCodeMstr().getProjectCode());
+			projectDetailReport.setProjectName(assignProjectToPm.getProjectCodeMstr().getProjectName());
+			projectDetailReport.setProjectType(assignProjectToPm.getProjectTypeMstr().getProjectType());
+			
+			monthRangePMReport.getProjectDetailReportList().add(projectDetailReport);			
+		}
+		}catch(Exception ex) {
+			throw ex;
+		}
+		return monthRangePMReport;
+	}
+
+}

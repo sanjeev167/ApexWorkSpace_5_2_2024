@@ -1,0 +1,11 @@
+package com.nus.fileupload.model;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 14-Feb-2025<br>
+ * @Time: 10:22:25 pm<br>
+ * @Objective: <br>
+ */
+public class ResourceAllocationModel {
+
+}

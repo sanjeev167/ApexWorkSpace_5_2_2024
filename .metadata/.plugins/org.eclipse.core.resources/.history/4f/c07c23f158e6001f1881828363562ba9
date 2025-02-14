@@ -1,0 +1,58 @@
+package com.nus.pvt.reports.service;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nus.base.service.UserLoginBaseService;
+import com.nus.pvt.admin.entities.AssignProjectToPm;
+import com.nus.pvt.admin.model.AssignProjectToPmModel;
+import com.nus.pvt.admin.repo.AssignProjectToPmRepo;
+import com.nus.pvt.reports.model.MonthRangePMReport;
+import com.nus.pvt.reports.model.ProjectDetailReport;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 08-Feb-2025<br>
+ * @Time: 4:01:12 pm<br>
+ * @Objective: <br>
+ */
+@Service
+public class AssignProjectsForReportToPmServiceImpl extends UserLoginBaseService
+		implements AssignProjectsForReportToPmService {
+
+	@Autowired
+	AssignProjectToPmRepo assignProjectToPmRepo;
+
+	@Override
+	public List<MonthRangePMReport> getPmReports(Date fMonthYr, Date tMonthYr) {
+		List<MonthRangePMReport> monthRangePMReportList = new ArrayList<MonthRangePMReport>();
+		try {
+		List<AssignProjectToPm> assignProjectToPmList = assignProjectToPmRepo.findByPm(getCurrentLoginUserId(),
+				activeC);		
+		MonthRangePMReport monthRangePMReport= new MonthRangePMReport();
+		ProjectDetailReport projectDetailReport;
+		for (AssignProjectToPm assignProjectToPm : assignProjectToPmList) {
+			projectDetailReport = new ProjectDetailReport();
+			projectDetailReport.setClientAccount(assignProjectToPm.getClientAccountMstr().getClientAccount());
+			assignProjectToPmModel.setProjectVertical(assignProjectToPm.getProjectVerticalMstr().getVerticalName());
+			assignProjectToPmModel.setProjectCode(assignProjectToPm.getProjectCodeMstr().getProjectCode());
+			assignProjectToPmModel.setProjectName(assignProjectToPm.getProjectCodeMstr().getProjectName());
+			assignProjectToPmModel.setProjectType(assignProjectToPm.getProjectTypeMstr().getProjectType());
+			assignProjectToPmModel.setProjectManagerName(assignProjectToPm.getApexUser3().getName());
+			assignProjectToPmModel.setAssignedon(new SimpleDateFormat("dd-MM-yyyy").format(assignProjectToPm.getAssignedOn()));
+			assignProjectToPmModel.setUserGrade(assignProjectToPm.getApexUser3().getUserGrade().getUserGrade());
+			assignProjectToPmModelList.add(assignProjectToPmModel);
+			
+		}
+		}catch(Exception ex) {
+			throw ex;
+		}
+		return assignProjectToPmModelList;
+	}
+
+}

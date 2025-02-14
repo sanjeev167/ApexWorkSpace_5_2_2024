@@ -1,0 +1,152 @@
+package com.nus.pvt.reports.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.nus.base.service.UserLoginBaseService;
+import com.nus.fileupload.service.ProjectMonthlyPlccService;
+import com.nus.pvt.admin.entities.AssignProjectToPm;
+import com.nus.pvt.admin.repo.AssignProjectToPmRepo;
+import com.nus.pvt.reports.model.PmProjectReportModel;
+import com.nus.pvt.reports.model.ProjectDetails;
+import com.nus.util.ApexUtility;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 08-Feb-2025<br>
+ * @Time: 4:01:12 pm<br>
+ * @Objective: <br>
+ */
+
+@Service
+public class PmAssignedProjectReportServiceImpl extends UserLoginBaseService
+		implements PmAssignedProjectReportService {
+
+	@Autowired
+	AssignProjectToPmRepo assignProjectToPmRepo;
+
+	@Override
+	public PmProjectReportModel getPmReports(String fMonthYr, String tMonthYr) throws Exception {
+		
+		PmProjectReportModel pMProjectReportModel = null;
+		try {
+		List<AssignProjectToPm> assignProjectToPmList = assignProjectToPmRepo.findByPm(getCurrentLoginUserId(),activeC);		
+		
+		if(assignProjectToPmList.size()!=0) {
+			pMProjectReportModel= new PmProjectReportModel();
+			pMProjectReportModel.setPm(assignProjectToPmList.get(0).getApexUser3().getName());
+			pMProjectReportModel.setEmpGrade(assignProjectToPmList.get(0).getApexUser3().getUserGrade().getUserGrade());
+			pMProjectReportModel.setfMonthYr(ApexUtility.getDateInMMYYYY(fMonthYr));			  
+			pMProjectReportModel.settMonthYr(ApexUtility.getDateInMMYYYY(tMonthYr));			
+			pMProjectReportModel.setReportFor(ApexUtility.monthsBetweenDates(fMonthYr, tMonthYr)+" - Month");
+		}
+		
+		ProjectDetails projectDetails;
+		for (AssignProjectToPm assignProjectToPm : assignProjectToPmList) {
+			projectDetails = new ProjectDetails();
+			projectDetails.setAssignedOn(dateFormatter.format(assignProjectToPm.getAssignedOn()));
+			if(assignProjectToPm.getReleasedOn()!=null)
+			   projectDetails.setReleasedOn(dateFormatter.format(assignProjectToPm.getReleasedOn()));
+			if(assignProjectToPm.getProjectClosedOn()!=null)
+			   projectDetails.setClosedOn(dateFormatter.format(assignProjectToPm.getProjectClosedOn()));
+			
+			projectDetails.setClientAccount(assignProjectToPm.getClientAccountMstr().getClientAccount());
+			projectDetails.setProjectVertical(assignProjectToPm.getProjectVerticalMstr().getVerticalName());
+			projectDetails.setProjectCode(assignProjectToPm.getProjectCodeMstr().getProjectCode());
+			projectDetails.setProjectName(assignProjectToPm.getProjectCodeMstr().getProjectName());
+			projectDetails.setProjectType(assignProjectToPm.getProjectTypeMstr().getProjectType());			
+			prepareOtherProjectSpecificData(assignProjectToPm.getProjectCodeId(),projectDetails,fMonthYr,tMonthYr);			
+			pMProjectReportModel.getProjectDetailReportList().add(projectDetails);			
+		}
+		}catch(Exception ex) {
+			throw ex;
+		}
+		return pMProjectReportModel;
+	}
+
+	private void prepareOtherProjectSpecificData(Integer projectCodeId,ProjectDetails projectDetails, String fMonthYr, String tMonthYr) {
+		
+		int fMonthNo = 0;int tMonthNo = 0;int year = 0;	
+        //PLCC		
+		preparePLCC(projectCodeId,projectDetails,fMonthNo,tMonthNo,year);
+		//Utilization
+		prepareUtilization(projectCodeId,projectDetails,fMonthNo,tMonthNo,year);
+		//Attrition	
+		prepareAttrition(projectCodeId,projectDetails,fMonthNo,tMonthNo,year);
+			
+		//prepareRevenuePerFTE(projectCodeId,projectDetails,fMonthNo,tMonthNo,year);
+	}
+
+	/**
+	 * @param projectCodeId
+	 * @param projectDetails
+	 * @param fMonthNo
+	 * @param tMonthNo
+	 * @param year
+	 * @Objective: All PLCC related data will be prepared here for a particular project
+	 */
+	@Autowired
+	ProjectMonthlyPlccService projectMonthlyPlccService;
+	private void preparePLCC(Integer projectCodeId, ProjectDetails projectDetails, int fMonthNo, int tMonthNo,int year) {
+		projectMonthlyPlccService.getMonthlyPlccDataBetweenMonths(projectCodeId, fMonthNo, tMonthNo)
+		
+		//Full time employee. This FTE data will from PLcc using H-column		
+				//prepareFTE(projectCodeId,projectDetails,fMonthNo,tMonthNo,year);
+				
+				//It will also come from PLCC using totalRevenueAmount -column
+				//prepareRevenue(projectCodeId,projectDetails,fMonthNo,tMonthNo,year);
+				
+				//This will be calculated using plcc data with column 
+				/*
+				 * 
+				 * YTDPM% = marginAmountCellNo/totalRevenueAmountCellNo
+				 */
+				//preparePmPercent(projectCodeId,projectDetails,fMonthNo,tMonthNo,year);
+		
+	}
+	
+
+	/**
+	 * @param projectCodeId
+	 * @param projectDetails
+	 * @param fMonthNo
+	 * @param tMonthNo
+	 * @param year
+	 * @Objective: All Resource-Utilization related data will be prepared here for a particular project
+	 */
+	private void prepareUtilization(Integer projectCodeId, ProjectDetails projectDetails, int fMonthNo, int tMonthNo,
+			int year) {
+		//YTD utilization for 2 month back data is required
+				//YTD utilization data is required. Both data will be taken from utilization table
+				
+				//YTD = billedDaysCellValue[Sum of year to date] /availableDaysCellValue[Sum of year to date]   => Confirmed
+				
+				//YTD[Utilization 2 month back for that particular month] = billedDaysCellValue[Sum of year to date] /availableDaysCellValue[Sum of year to date]  
+						
+				//prepareResourceUtilization(projectCodeId,projectDetails,fMonthNo,tMonthNo,year);
+
+		
+	}
+
+	
+	
+	/**
+	 * @param projectCodeId
+	 * @param projectDetails
+	 * @param fMonthNo
+	 * @param tMonthNo
+	 * @param year
+	 * @Objective: All Resource-Attrition related data will be prepared here for a particular project
+	 */
+	private void prepareAttrition(Integer projectCodeId, ProjectDetails projectDetails, int fMonthNo, int tMonthNo,
+			int year) {
+		//This will come from Attrition table
+		// YTD Attrition % = 
+				
+		//prepareAttrition(projectCodeId,projectDetails,fMonthNo,tMonthNo,year);
+		
+	}
+
+}

@@ -1,0 +1,5 @@
+package com.nus.pvt.reports.model;
+
+public class MonthRangeUtilization {
+
+}

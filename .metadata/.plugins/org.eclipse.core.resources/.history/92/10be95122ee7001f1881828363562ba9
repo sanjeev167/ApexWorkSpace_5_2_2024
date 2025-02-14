@@ -1,0 +1,14 @@
+package com.nus.pvt.reports.service;
+
+import com.nus.pvt.reports.model.PMReportModel;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 08-Feb-2025<br>
+ * @Time: 4:01:01 pm<br>
+ * @Objective: <br>
+ */
+public interface PmAssignedProjectReportService {
+
+	public PMReportModel getPmReports(String fMonthYr, String tMonthYr) throws Exception;
+}

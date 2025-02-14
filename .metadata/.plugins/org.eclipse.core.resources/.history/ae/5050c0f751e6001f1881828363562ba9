@@ -1,0 +1,13 @@
+package com.nus.pvt.reports.model;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 09-Feb-2025<br>
+ * @Time: 12:47:03 am<br>
+ * @Objective: <br>
+ */
+public class MonthRangeReport {
+	private String fMonthYr;
+	private String tMonthYr;
+	
+}

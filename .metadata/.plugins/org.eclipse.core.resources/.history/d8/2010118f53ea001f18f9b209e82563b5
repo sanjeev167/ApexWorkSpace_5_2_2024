@@ -1,0 +1,26 @@
+package com.nus.fileupload.entities;
+
+import jakarta.persistence.Transient;
+
+/**
+ * @Author: SanjeevKumar<br>
+ * @Date: 14-Feb-2025<br>
+ * @Time: 3:09:12 am<br>
+ * @Objective: <br>
+ */
+public class BaseEntity {
+	
+	@Transient
+	protected String fileUploadDates;
+
+	public String getFileUploadDates() {
+		return fileUploadDates;
+	}
+
+	public void setFileUploadDates(String fileUploadDates) {
+		this.fileUploadDates = fileUploadDates;
+	}
+	
+	
+
+}

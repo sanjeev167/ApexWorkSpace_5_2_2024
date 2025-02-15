@@ -54,6 +54,7 @@ public class CustomUserDetails implements UserDetails {
 					allAssignedGroupRoles = allAssignedGroupRoles + "," + roleName;
 			}
 		}
+		if(allAssignedGroupRoles!=null)
 		authorities = Arrays.stream(allAssignedGroupRoles.split(",")).map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
 	}

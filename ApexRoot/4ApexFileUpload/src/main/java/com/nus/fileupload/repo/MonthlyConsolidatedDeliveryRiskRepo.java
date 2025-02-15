@@ -1,5 +1,6 @@
 package com.nus.fileupload.repo;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +18,11 @@ import com.nus.fileupload.entities.ConsolidatedDeliveryRisk;
 @Repository
 public interface MonthlyConsolidatedDeliveryRiskRepo extends JpaRepository<ConsolidatedDeliveryRisk, Integer>{
 
-	@Query(value = "SELECT * FROM consolidated_delivery_risk WHERE risk_for_month =?1 AND risk_for_year =?2", nativeQuery = true)
-	List<ConsolidatedDeliveryRisk> getAllByMonthAndYear(Integer month, Integer year);
+	@Query(value = "SELECT * FROM consolidated_delivery_risk WHERE file_upload_date =?1", nativeQuery = true)
+	List<ConsolidatedDeliveryRisk> getAllByMonthAndYear(Date fileUploadDate);
+
+	@Query(value = "SELECT * FROM consolidated_delivery_risk WHERE project_code_id =?1"
+			                                 + " AND file_upload_date >=?2 AND file_upload_date <=?3", nativeQuery = true)	
+	List<ConsolidatedDeliveryRisk> getMonthlyConsolidatedDeliveryRiskBetweenMonths(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate);
 
 }

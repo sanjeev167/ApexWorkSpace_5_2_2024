@@ -87,7 +87,7 @@ public class ApexGroupRoleController extends ApexBaseCtrl{
 			apiReq=makeApiMetaData();
 			apiReq.setPayLoad(id);
 			//Return response in a pre-defined format	       	
-			apiResponse=makeSuccessResponse(true,apiReq);
+			apiResponse=makeSuccessResponse(isDeleted,apiReq);
 			return ResponseEntity.ok().body(apiResponse);
 		}else {
 			throw new ResourceNotFoundException("No ApexGroupRole with id ("+id+") is found.");

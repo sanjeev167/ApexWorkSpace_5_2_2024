@@ -58,7 +58,7 @@ public class ClientAccountMstrServiceUploadImpl extends UserLoginBaseService imp
 					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
 						if (index++ == 0)
 							continue;
-						clientAccountMstr = new ClientAccountMstr(getCurrentLoginUserId(),currentDate,"Y" );
+						clientAccountMstr = new ClientAccountMstr(getCurrentLoginUserId(),currentDate,activeC );
 						
 						if (row.getCell(clientAccountCellNo) != null && row.getCell(clientAccountCellNo).getCellType() == CellType.STRING) {							
 							clientAccountMstr.setClientAccount(row.getCell(clientAccountCellNo).getStringCellValue().trim());

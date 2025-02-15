@@ -3,6 +3,7 @@ package com.nus.fileupload.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -91,7 +92,7 @@ public class MonthlyConsolidatedDeliveryRiskServiceImpl extends UserLoginBaseSer
 					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
 						if (index++ == 0)
 							continue;
-						consolidatedDeliveryRisk = new ConsolidatedDeliveryRisk(fileUploadPayload.getMonth(), fileUploadPayload.getYear(), getCurrentLoginUserId(),"Y" );
+						consolidatedDeliveryRisk = new ConsolidatedDeliveryRisk(fileUploadPayload.getFileUploadDate(), getCurrentLoginUserId(),"Y" );
 												
 						if (row.getCell(riskTypeCellNo) != null && row.getCell(riskTypeCellNo).getCellType() == CellType.STRING) {
 							consolidatedDeliveryRisk.setRiskType(row.getCell(riskTypeCellNo).getStringCellValue().trim());							
@@ -191,7 +192,7 @@ public class MonthlyConsolidatedDeliveryRiskServiceImpl extends UserLoginBaseSer
 			//Before saving new record, must update each record of the list with this file-reference-id.
 			List<ConsolidatedDeliveryRisk> updatedConsolidatedDeliveryRiskReadFromExcel = updateFileReferenceOfAllRecordsInList(fileReference.getId(),consolidatedDeliveryRiskListReadFromExcel);			
 			//Start file movement				
-				List<ConsolidatedDeliveryRisk> readExistingConsolidatedDeliveryRiskList = monthlyConsolidatedDeliveryRiskRepo.getAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear());	
+				List<ConsolidatedDeliveryRisk> readExistingConsolidatedDeliveryRiskList = monthlyConsolidatedDeliveryRiskRepo.getAllByMonthAndYear(fileUploadPayload.getFileUploadDate());	
 				if(readExistingConsolidatedDeliveryRiskList.size()!=0) {	//Check whether file movement is required or not				
 					savedConsolidatedDeliveryRiskList = moveFileFromMainToHistoryTable(readExistingConsolidatedDeliveryRiskList,updatedConsolidatedDeliveryRiskReadFromExcel);
 			}//End of records availability check
@@ -241,9 +242,9 @@ public class MonthlyConsolidatedDeliveryRiskServiceImpl extends UserLoginBaseSer
 			hconsolidatedDeliveryRisk.setRiskStatus(consolidatedDeliveryRisk.getRiskStatus());
 			hconsolidatedDeliveryRisk.setRemark(consolidatedDeliveryRisk.getRemark());	
 			
-			hconsolidatedDeliveryRisk.setProjectCodeId(consolidatedDeliveryRisk.getProjectCodeId());			
-			hconsolidatedDeliveryRisk.setRiskForMonth(consolidatedDeliveryRisk.getRiskForMonth());
-			hconsolidatedDeliveryRisk.setRiskForYear(consolidatedDeliveryRisk.getRiskForYear());			
+			hconsolidatedDeliveryRisk.setProjectCodeId(consolidatedDeliveryRisk.getProjectCodeId());
+			hconsolidatedDeliveryRisk.setFileUploadDate(consolidatedDeliveryRisk.getFileUploadDate());
+						
 			hconsolidatedDeliveryRisk.setCreatedBy(consolidatedDeliveryRisk.getCreatedBy());			   
 			hconsolidatedDeliveryRisk.setCreatedOn(consolidatedDeliveryRisk.getCreatedOn());			   
 			hconsolidatedDeliveryRisk.setModifiedBy(consolidatedDeliveryRisk.getModifiedBy());
@@ -268,6 +269,13 @@ public class MonthlyConsolidatedDeliveryRiskServiceImpl extends UserLoginBaseSer
 	public void generateExcel(HttpServletResponse response, String fileName) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<ConsolidatedDeliveryRisk> getMonthlyConsolidatedDeliveryRiskBetweenMonths(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate) {
+		List<ConsolidatedDeliveryRisk> monthlyConsolidatedDeliveryRiskList = 
+				monthlyConsolidatedDeliveryRiskRepo.getMonthlyConsolidatedDeliveryRiskBetweenMonths(projectCodeId,fFileUploadDate,tFileUploadDate);
+		return monthlyConsolidatedDeliveryRiskList;
 	}
 	
 	

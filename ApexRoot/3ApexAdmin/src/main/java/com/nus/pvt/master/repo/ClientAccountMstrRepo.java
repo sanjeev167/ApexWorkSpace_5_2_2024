@@ -1,5 +1,7 @@
 package com.nus.pvt.master.repo;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +16,5 @@ import com.nus.pvt.master.entities.ClientAccountMstr;
 @Repository
 public interface ClientAccountMstrRepo extends JpaRepository<ClientAccountMstr, Integer> {
 
+	List<ClientAccountMstr> findAllByActiveC(String activeC);
 }

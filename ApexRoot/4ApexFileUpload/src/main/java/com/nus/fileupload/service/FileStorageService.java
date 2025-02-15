@@ -14,7 +14,7 @@ import com.nus.base.service.UserLoginBaseService;
 import com.nus.fileupload.entities.FileReference;
 import com.nus.fileupload.model.FileUploadPayload;
 import com.nus.fileupload.repo.FileReferenceRepo;
-import com.nus.util.DateTimeFormatUtil;
+import com.nus.util.Utility;
 
 /**
  * @Author: SanjeevKumar<br>
@@ -37,10 +37,11 @@ public class FileStorageService extends UserLoginBaseService{
 		
 	}
 	
-	public void createDirectories(FileUploadPayload fileUploadPayload) {
+	public void createDirectories(FileUploadPayload fileUploadPayload) {		
+		String fileUploadDate[]=dateFormatter.format(fileUploadPayload.getFileUploadDate()).split("-");
 		this.fileStorageLocation = Paths.get(fileStorageBaseLocation+"/"+ fileUploadPayload.getFileType()
-		                                                            +"/"+ fileUploadPayload.getYear()
-		                                                            +"/"+ fileUploadPayload.getMonth())
+		                                                            +"/"+ fileUploadDate[1]
+		                                                            +"/"+ fileUploadDate[2])
 				                                                    .toAbsolutePath().normalize();
 		try {
 			Files.createDirectories(this.fileStorageLocation);
@@ -61,7 +62,7 @@ public class FileStorageService extends UserLoginBaseService{
 
 	public String storeFile(FileUploadPayload fileUploadPayload) {		
 		// Normalize file name
-		String fileName = (new DateTimeFormatUtil()).formattedDateTime + "-"+fileUploadPayload.getFile().getOriginalFilename();
+		String fileName = (new Utility()).formattedDateTime + "-"+fileUploadPayload.getFile().getOriginalFilename();
 
 		try {
 			// Check if the filename contains invalid characters
@@ -82,9 +83,9 @@ public class FileStorageService extends UserLoginBaseService{
 	public FileReference saveFileReference(FileUploadPayload fileUploadPayload) {
 		
 		FileReference fileReference =new FileReference();
-		
-		fileReference.setFileMonth(fileUploadPayload.getMonth());
-		fileReference.setFileYear(fileUploadPayload.getYear());
+		String fileUploadDate[]=dateFormatter.format(fileUploadPayload.getFileUploadDate()).split("-");
+		fileReference.setFileMonth(Integer.parseInt(fileUploadDate[1]));
+		fileReference.setFileYear(Integer.parseInt(fileUploadDate[2]));		
 		fileReference.setCreatedBy(fileUploadPayload.getUserId());
 		fileReference.setFileTypeId(fileUploadPayload.getFileTypeId());
 		fileReference.setFileName(fileUploadPayload.getFileName());

@@ -3,6 +3,7 @@ package com.nus.fileupload.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -24,6 +25,7 @@ import com.nus.fileupload.entities.HprojectMonthlyResourceAllocation;
 import com.nus.fileupload.entities.ProjectMonthlyResourceAllocation;
 import com.nus.fileupload.loader.DataLoader;
 import com.nus.fileupload.model.FileUploadPayload;
+import com.nus.fileupload.model.ResourceAllocationModel;
 import com.nus.fileupload.repo.HprojectMonthlyResourceAllocationRepo;
 import com.nus.fileupload.repo.MonthlyResourceAllocationRepo;
 import com.nus.pvt.master.entities.ProjectCodeMstr;
@@ -57,10 +59,12 @@ public class MonthlyResourceAllocationServiceImpl extends UserLoginBaseService i
 		//Checked
 		
 		int projectCodeCellNo = 5;//String		
-		int empStatusCellValue = 2;//String
-		int allocationPercentageCellValue = 6;//Double		
-		int billingStatusCellValue = 17;//String
-		int empGradeCellValue = 33;//String
+		int empStatusCellNo = 2;//String
+		int allocationPercentageCellNo = 6;//Double		
+		int billingStatusCellNo = 17;//String
+		int empGradeCellNo = 33;//String
+		int empCodeCellNo= 1; //String
+		int empNameCellNo = 3;//String
 
 		List<ProjectMonthlyResourceAllocation> monthlyResourceAllocationListReadFromExcel = new ArrayList<ProjectMonthlyResourceAllocation>();
 		Workbook workbook = null;
@@ -79,28 +83,36 @@ public class MonthlyResourceAllocationServiceImpl extends UserLoginBaseService i
 					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
 						if (index++ == 0)
 							continue;
-						 projectMonthlyResourceAllocation = new ProjectMonthlyResourceAllocation(fileUploadPayload.getMonth(), fileUploadPayload.getYear(), getCurrentLoginUserId(),"Y" );
+						 projectMonthlyResourceAllocation = new ProjectMonthlyResourceAllocation(fileUploadPayload.getFileUploadDate(), getCurrentLoginUserId(),"Y" );
 						
 						if (row.getCell(projectCodeCellNo) != null && row.getCell(projectCodeCellNo).getCellType() == CellType.STRING) {
 							projectCodeMstr =dataLoader.getProjectCodeMstrMap().get(row.getCell(projectCodeCellNo).getStringCellValue().trim());							
 							//System.out.println("Project Code = "+row.getCell(projectCodeCellNo).getStringCellValue().trim());
 							projectMonthlyResourceAllocation.setProjectCodeId(projectCodeMstr.getId());
 						}						
-						
-						if (row.getCell(empStatusCellValue) != null && row.getCell(empStatusCellValue).getCellType() == CellType.STRING) {
-							projectMonthlyResourceAllocation.setEmpStatus(row.getCell(empStatusCellValue).getStringCellValue().trim());							
+												
+						if (row.getCell(empCodeCellNo) != null && row.getCell(empCodeCellNo).getCellType() == CellType.STRING) {
+							projectMonthlyResourceAllocation.setEmpCode(row.getCell(empCodeCellNo).getStringCellValue().trim());							
 						}
 						
-						if (row.getCell(allocationPercentageCellValue) != null && row.getCell(allocationPercentageCellValue).getCellType() == CellType.NUMERIC) {							
-							projectMonthlyResourceAllocation.setAllocationPercentage(row.getCell(allocationPercentageCellValue).getNumericCellValue());
+						if (row.getCell(empNameCellNo) != null && row.getCell(empNameCellNo).getCellType() == CellType.STRING) {
+							projectMonthlyResourceAllocation.setEmpName(row.getCell(empNameCellNo).getStringCellValue().trim());							
+						}
+						
+						if (row.getCell(empStatusCellNo) != null && row.getCell(empStatusCellNo).getCellType() == CellType.STRING) {
+							projectMonthlyResourceAllocation.setEmpStatus(row.getCell(empStatusCellNo).getStringCellValue().trim());							
+						}
+						
+						if (row.getCell(allocationPercentageCellNo) != null && row.getCell(allocationPercentageCellNo).getCellType() == CellType.NUMERIC) {							
+							projectMonthlyResourceAllocation.setAllocationPercentage(row.getCell(allocationPercentageCellNo).getNumericCellValue());
 						}			
 						
-						if (row.getCell(billingStatusCellValue) != null && row.getCell(billingStatusCellValue).getCellType() == CellType.STRING) {
-							projectMonthlyResourceAllocation.setBillingStatus(row.getCell(billingStatusCellValue).getStringCellValue().trim());							
+						if (row.getCell(billingStatusCellNo) != null && row.getCell(billingStatusCellNo).getCellType() == CellType.STRING) {
+							projectMonthlyResourceAllocation.setBillingStatus(row.getCell(billingStatusCellNo).getStringCellValue().trim());							
 						}
 						
-						if (row.getCell(empGradeCellValue) != null && row.getCell(empGradeCellValue).getCellType() == CellType.STRING) {
-							projectMonthlyResourceAllocation.setEmpGrade(row.getCell(empGradeCellValue).getStringCellValue().trim());							
+						if (row.getCell(empGradeCellNo) != null && row.getCell(empGradeCellNo).getCellType() == CellType.STRING) {
+							projectMonthlyResourceAllocation.setEmpGrade(row.getCell(empGradeCellNo).getStringCellValue().trim());							
 						}
 						
 						monthlyResourceAllocationListReadFromExcel.add(projectMonthlyResourceAllocation);
@@ -138,7 +150,7 @@ public class MonthlyResourceAllocationServiceImpl extends UserLoginBaseService i
 			//Before saving new record, must update each record of the list with this file-reference-id.
 			List<ProjectMonthlyResourceAllocation> updatedMonthlyResourceAllocationListReadFromExcel = updateFileReferenceOfAllRecordsInList(fileReference.getId(),monthlyResourceAllocationListReadFromExcel);			
 			//Start file movement				
-				List<ProjectMonthlyResourceAllocation> readExistingMonthlyResourceAllocationList = monthlyResourceAllocationRepo.getAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear());	
+				List<ProjectMonthlyResourceAllocation> readExistingMonthlyResourceAllocationList = monthlyResourceAllocationRepo.getAllByMonthAndYear(fileUploadPayload.getFileUploadDate());	
 				if(readExistingMonthlyResourceAllocationList.size()!=0) {	//Check whether file movement is required or not				
 					savedMonthlyResourceAllocation = moveFileFromMainToHistoryTable(readExistingMonthlyResourceAllocationList,updatedMonthlyResourceAllocationListReadFromExcel);
 			}//End of records availability check
@@ -179,8 +191,8 @@ public class MonthlyResourceAllocationServiceImpl extends UserLoginBaseService i
 			hprojectMonthlyResourceAllocation.setEmpGrade(projectMonthlyResourceAllocation.getEmpGrade());			
 			
 			hprojectMonthlyResourceAllocation.setProjectCodeId(projectMonthlyResourceAllocation.getProjectCodeId());			
-			hprojectMonthlyResourceAllocation.setAllocationMonth(projectMonthlyResourceAllocation.getAllocationMonth());
-			hprojectMonthlyResourceAllocation.setAllocationYear(projectMonthlyResourceAllocation.getAllocationYear());			
+			hprojectMonthlyResourceAllocation.setFileUploadDate(projectMonthlyResourceAllocation.getFileUploadDate());
+			
 			hprojectMonthlyResourceAllocation.setCreatedBy(projectMonthlyResourceAllocation.getCreatedBy());			   
 			hprojectMonthlyResourceAllocation.setCreatedOn(projectMonthlyResourceAllocation.getCreatedOn());			   
 			hprojectMonthlyResourceAllocation.setModifiedBy(projectMonthlyResourceAllocation.getModifiedBy());
@@ -206,6 +218,24 @@ public class MonthlyResourceAllocationServiceImpl extends UserLoginBaseService i
 	public void generateExcel(HttpServletResponse response, String fileName) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<ResourceAllocationModel> getMonthlyDistinctResourceAllocationBetweenMonths(int projectCodeId,
+			Date fFileUploadDate,Date tFileUploadDate) {
+		List<ResourceAllocationModel> monthlyResourceAllocationList = 
+				monthlyResourceAllocationRepo.getMonthlyDistinctResourceAllocationBetweenMonths(projectCodeId,
+						fFileUploadDate,tFileUploadDate);
+		return monthlyResourceAllocationList;
+	}
+
+	@Override
+	public List<ProjectMonthlyResourceAllocation> getDistinctResourceAllocationForCurrentMonth(int projectCodeId,
+			Date fileUploadDate) {
+		List<ProjectMonthlyResourceAllocation> distinctResourceAllocationForCurrentMonthList=
+				monthlyResourceAllocationRepo.getDistinctResourceAllocationForCurrentMonth(projectCodeId,
+						fileUploadDate);
+		return distinctResourceAllocationForCurrentMonthList;
 	}
 
 }//End of MonthlyResourceAllocationServiceImpl

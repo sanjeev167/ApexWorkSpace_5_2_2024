@@ -3,6 +3,7 @@ package com.nus.fileupload.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -75,7 +76,7 @@ public class MonthlyRRRServiceImpl extends UserLoginBaseService implements Month
 					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
 						if (index++ == 0)
 							continue;
-						projectMonthlyRrrr = new ProjectMonthlyRrrr(fileUploadPayload.getMonth(), fileUploadPayload.getYear(), getCurrentLoginUserId(),"Y" );
+						projectMonthlyRrrr = new ProjectMonthlyRrrr(fileUploadPayload.getFileUploadDate(), getCurrentLoginUserId(),"Y" );
 						
 						if (row.getCell(expectedRateCellNo) != null && row.getCell(expectedRateCellNo).getCellType() == CellType.NUMERIC) {
 							projectMonthlyRrrr.setExpectedRate(row.getCell(expectedRateCellNo).getNumericCellValue());							
@@ -128,7 +129,7 @@ public class MonthlyRRRServiceImpl extends UserLoginBaseService implements Month
 			//Before saving new record, must update each record of the list with this file-reference-id.
 			List<ProjectMonthlyRrrr> updatedMonthlyRRRRListReadFromExcel = updateFileReferenceOfAllRecordsInList(fileReference.getId(),monthlyRRRRListReadFromExcel);			
 			//Start file movement				
-				List<ProjectMonthlyRrrr> readExistingMonthlyRRRRList = monthlyRRRRepo.getAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear());	
+				List<ProjectMonthlyRrrr> readExistingMonthlyRRRRList = monthlyRRRRepo.getAllByMonthAndYear(fileUploadPayload.getFileUploadDate());	
 				if(readExistingMonthlyRRRRList.size()!=0) {	//Check whether file movement is required or not				
 					savedProjectMonthlyRrrr = moveFileFromMainToHistoryTable(readExistingMonthlyRRRRList,updatedMonthlyRRRRListReadFromExcel);
 			}//End of records availability check
@@ -163,8 +164,8 @@ public class MonthlyRRRServiceImpl extends UserLoginBaseService implements Month
 			   
 			   hprojectMonthlyRrrr.setExpectedRate(projectMonthlyRrrr.getExpectedRate());			   
 			   hprojectMonthlyRrrr.setProjectCodeId(projectMonthlyRrrr.getProjectCodeId());
-			   hprojectMonthlyRrrr.setRrrrMonth(projectMonthlyRrrr.getRrrrMonth());
-			   hprojectMonthlyRrrr.setRrrrYear(projectMonthlyRrrr.getRrrrYear());
+			   hprojectMonthlyRrrr.setFileUploadDate(projectMonthlyRrrr.getFileUploadDate());
+			  
 			   hprojectMonthlyRrrr.setCreatedBy(projectMonthlyRrrr.getCreatedBy());			   
 			   hprojectMonthlyRrrr.setCreatedOn(projectMonthlyRrrr.getCreatedOn());			   
 			   hprojectMonthlyRrrr.setModifiedBy(projectMonthlyRrrr.getModifiedBy());
@@ -185,6 +186,26 @@ public class MonthlyRRRServiceImpl extends UserLoginBaseService implements Month
 		}		
 		return monthlyRRRRListReadFromExcel;
 	}
+
+	@Override
+	public List<ProjectMonthlyRrrr> getMonthlyRRRRBetweenMonths(int projectCodeId, Date fFileUploadDate,Date tFileUploadDate) {
+		List<ProjectMonthlyRrrr> monthlyRRRRBetweenMonthsList = 
+				monthlyRRRRepo.getMonthlyRRRRBetweenMonths(projectCodeId, fFileUploadDate, tFileUploadDate);
+		return monthlyRRRRBetweenMonthsList;
+	}
+
+	@Override
+	public Integer getExpectedIncreasePMCountFromRRRR(int projectCodeId, Date fFileUploadDate,Date tFileUploadDate) {
+		return	monthlyRRRRepo.getMonthlyExpectedIncreasePM_RRRR(projectCodeId,  fFileUploadDate, tFileUploadDate);	
+	}
+
+	@Override
+	public List<ProjectMonthlyRrrr> getRRRRPotentialRevenuePerMonth(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate) {
+		List<ProjectMonthlyRrrr>	rRRRPotentialRevenuePerMonthList =  monthlyRRRRepo.getRRRRPotentialRevenuePerMonth(projectCodeId, fFileUploadDate,tFileUploadDate);	
+		return rRRRPotentialRevenuePerMonthList;
+	}
+
+	
 
 	
 }//End of MonthlyRRRService

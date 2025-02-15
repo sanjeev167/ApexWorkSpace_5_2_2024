@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,7 +43,8 @@ public class ProjectCodeMstrUploadCtrl extends ApexBaseCtrl{
 
 	@RequestMapping("/projectCodes")
 	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-	 public ResponseEntity<ApiResponse> upload( @Validated @RequestParam("file") MultipartFile file, @RequestParam("month") Integer month,@RequestParam("year") Integer year) {
+	@PreAuthorize("hasAnyAuthority('ROLE_SUPER','ROLE_ADMIN')")
+	public ResponseEntity<ApiResponse> upload( @Validated @RequestParam("file") MultipartFile file, @RequestParam("month") Integer month,@RequestParam("year") Integer year) {
 	   	    		    
 		FileUploadPayload fileUploadPayload = new FileUploadPayload(file);
 		

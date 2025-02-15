@@ -60,7 +60,7 @@ private final Logger logger = LoggerFactory.getLogger(ProjectMonthlyPlccServiceI
 					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
 						if (index++ == 0)
 							continue;
-						projectCodeMstr = new ProjectCodeMstr(getCurrentLoginUserId(),"Y" );
+						projectCodeMstr = new ProjectCodeMstr(getCurrentLoginUserId(),activeC );
 						
 						if (row.getCell(projectCodeCellNo) != null && row.getCell(projectCodeCellNo).getCellType() == CellType.STRING) {							
 							projectCodeMstr.setProjectCode(row.getCell(projectCodeCellNo).getStringCellValue().trim());

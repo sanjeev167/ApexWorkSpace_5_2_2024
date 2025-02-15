@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;ApexRoot/2ApexAdmin&apos; to &apos;3ApexAdmin&apos;" description="Rename resource &apos;2ApexAdmin&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="2ApexAdmin" name="3ApexAdmin" stamp="1739595845426" updateReferences="true"/>&#x0A;<refactoring accessors="true" comment="Delete element from project &apos;ApexRoot&apos;&#x0D;&#x0A;- Original project: &apos;ApexRoot&apos;&#x0D;&#x0A;- Original element: &apos;3ApexAdmin&apos;" description="Delete element" element1="3ApexAdmin" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="1" stamp="1739595896308" subPackages="false" version="1.0"/>
+</session>

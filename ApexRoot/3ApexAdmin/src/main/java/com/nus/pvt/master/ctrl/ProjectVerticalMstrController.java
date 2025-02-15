@@ -85,7 +85,7 @@ public class ProjectVerticalMstrController extends ApexBaseCtrl {
 			apiReq=makeApiMetaData();
 			apiReq.setPayLoad(id);
 			//Return response in a pre-defined format	       	
-			apiResponse=makeSuccessResponse(true,apiReq);
+			apiResponse=makeSuccessResponse(isDeleted,apiReq);
 			return ResponseEntity.ok().body(apiResponse);
 		}else {
 			throw new ResourceNotFoundException("No ProjectVerticalMstr with id("+id+") is found.");

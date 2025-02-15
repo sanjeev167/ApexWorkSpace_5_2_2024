@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 public interface ClientAccountMstrUploadService {
 
-public List<ClientAccountMstr> readExcel(FileUploadPayload fileUploadPayload) throws IOException;
+    public List<ClientAccountMstr> readExcel(FileUploadPayload fileUploadPayload) throws IOException;
 	
 	public List<ClientAccountMstr> saveExcel(List<ClientAccountMstr> clientAccountMstrUploadList)throws DataIntegrityViolationException;
 	

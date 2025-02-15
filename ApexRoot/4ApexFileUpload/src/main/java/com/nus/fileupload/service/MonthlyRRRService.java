@@ -1,6 +1,7 @@
 package com.nus.fileupload.service;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import com.nus.exception.DataIntegrityViolationException;
@@ -20,7 +21,14 @@ public interface MonthlyRRRService {
 public List<ProjectMonthlyRrrr> readExcel(FileUploadPayload fileUploadPayload) throws IOException;	
 	
 	public List<ProjectMonthlyRrrr> saveExcel(List<ProjectMonthlyRrrr> projectMonthlyRrrrList,FileUploadPayload fileUploadPayload)throws DataIntegrityViolationException, IOException, Exception;
+	public List<ProjectMonthlyRrrr> getMonthlyRRRRBetweenMonths(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate);
 		
 	public void generateExcel(HttpServletResponse response, String fileName);
 
+	
+	public Integer getExpectedIncreasePMCountFromRRRR(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate);
+
+	public List<ProjectMonthlyRrrr> getRRRRPotentialRevenuePerMonth(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate);
+
+	
 }//End of MonthlyRRRService

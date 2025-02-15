@@ -3,6 +3,7 @@ package com.nus.fileupload.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -76,7 +77,7 @@ public class MonthlyResourceUtilizationServiceImpl extends UserLoginBaseService 
 					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
 						if (index++ == 0)
 							continue;
-						projectMonthlyResourceUtilization = new ProjectMonthlyResourceUtilization(fileUploadPayload.getMonth(), fileUploadPayload.getYear(), getCurrentLoginUserId(),currentDate,"Y" );
+						projectMonthlyResourceUtilization = new ProjectMonthlyResourceUtilization(fileUploadPayload.getFileUploadDate(), getCurrentLoginUserId(),currentDate,"Y" );
 						
 						if (row.getCell(billedDaysCellValue) != null && row.getCell(billedDaysCellValue).getCellType() == CellType.NUMERIC) {
 							projectMonthlyResourceUtilization.setBilledDays((int) row.getCell(billedDaysCellValue).getNumericCellValue());
@@ -134,7 +135,7 @@ public class MonthlyResourceUtilizationServiceImpl extends UserLoginBaseService 
 			//Before saving new record, must update each record of the list with this file-reference-id.
 			List<ProjectMonthlyResourceUtilization> updatedMonthlyResourceUtilizationListReadFromExcel = updateFileReferenceOfAllRecordsInList(fileReference.getId(),monthlyResourceUtilizationListReadFromExcel);			
 			//Start file movement				
-				List<ProjectMonthlyResourceUtilization> readExistingMonthlyResourceUtilizationList = monthlyResourceUtilizationRepo.getAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear());	
+				List<ProjectMonthlyResourceUtilization> readExistingMonthlyResourceUtilizationList = monthlyResourceUtilizationRepo.getAllByMonthAndYear(fileUploadPayload.getFileUploadDate());	
 				if(readExistingMonthlyResourceUtilizationList.size()!=0) {	//Check whether file movement is required or not				
 					savedProjectMonthlyResourceUtilizationList = moveFileFromMainToHistoryTable(readExistingMonthlyResourceUtilizationList,updatedMonthlyResourceUtilizationListReadFromExcel);
 			}//End of records availability check
@@ -168,8 +169,8 @@ public class MonthlyResourceUtilizationServiceImpl extends UserLoginBaseService 
 			hprojectMonthlyResourceUtilization.setBilledDays(projectMonthlyResourceUtilization.getBilledDays());
 			hprojectMonthlyResourceUtilization.setAvailableDays(projectMonthlyResourceUtilization.getAvailableDays());			
 			hprojectMonthlyResourceUtilization.setProjectCodeId(projectMonthlyResourceUtilization.getProjectCodeId());			
-			hprojectMonthlyResourceUtilization.setResourceUtilizationMonth(projectMonthlyResourceUtilization.getResourceUtilizationMonth());
-			hprojectMonthlyResourceUtilization.setResourceUtilizationYear(projectMonthlyResourceUtilization.getResourceUtilizationYear());
+			hprojectMonthlyResourceUtilization.setFileUploadDate(projectMonthlyResourceUtilization.getFileUploadDate());
+			
 			hprojectMonthlyResourceUtilization.setCreatedBy(projectMonthlyResourceUtilization.getCreatedBy());			   
 			hprojectMonthlyResourceUtilization.setCreatedOn(projectMonthlyResourceUtilization.getCreatedOn());			   
 			hprojectMonthlyResourceUtilization.setModifiedBy(projectMonthlyResourceUtilization.getModifiedBy());
@@ -188,6 +189,23 @@ public class MonthlyResourceUtilizationServiceImpl extends UserLoginBaseService 
 			projectMonthlyResourceUtilization.setFileReferenceId(fileReferenceId);
 		}		
 		return monthlyResourceUtilizationListReadFromExcel;
+	}
+
+	@Override
+	public List<ProjectMonthlyResourceUtilization> getMonthlyResourceUtilizationBetweenMonths(int projectCodeId,
+			Date fFileUploadDate,Date tFileUploadDate) {
+		
+		List<ProjectMonthlyResourceUtilization> monthlyResourceUtilizationList = 
+				monthlyResourceUtilizationRepo.getMonthlyResourceUtilizationBetweenMonths(projectCodeId,fFileUploadDate,tFileUploadDate);
+		
+		return monthlyResourceUtilizationList;
+	}
+
+	@Override
+	public ProjectMonthlyResourceUtilization getAMonthSpecificResourceUtilization(int projectCodeId,Date twoMonthBackFileUploadDate) {
+		ProjectMonthlyResourceUtilization projectMonthlyResourceUtilization =
+				monthlyResourceUtilizationRepo.getAMonthSpecificResourceUtilization(projectCodeId,twoMonthBackFileUploadDate);
+		return projectMonthlyResourceUtilization;
 	}	
 
 }//End of MonthlyResourceUtilizationServiceImpl

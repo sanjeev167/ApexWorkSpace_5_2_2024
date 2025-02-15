@@ -3,6 +3,7 @@ package com.nus.fileupload.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -54,12 +55,11 @@ public class ProjectMonthlyPlccServiceImpl extends UserLoginBaseService implemen
 	@Override
 	public List<ProjectMonthlyPlcc> readExcel(FileUploadPayload fileUploadPayload) throws IOException {
 		
-		
 		int totalRevenueAmountCellNo=14;// Double => Checked	
 		int marginAmountCellNo =28;// Double => Checked
 		int fteCellNo = 7; // Double
 		int projectCodeCellNo= 0; // String => Checked
-
+		
 		List<ProjectMonthlyPlcc> projectMonthlyPlccList = new ArrayList<ProjectMonthlyPlcc>();
 		Workbook workbook = null;
 		String fileName = fileUploadPayload.getFile().getOriginalFilename();
@@ -72,12 +72,15 @@ public class ProjectMonthlyPlccServiceImpl extends UserLoginBaseService implemen
 				workbook.forEach(sheet -> {
 					logger.info("Title of sheet => " + sheet.getSheetName());					
 					int index = 0;
-					ProjectMonthlyPlcc projectMonthlyPlcc;	ProjectCodeMstr projectCodeMstr;				
+					ProjectMonthlyPlcc projectMonthlyPlcc;	ProjectCodeMstr projectCodeMstr;
+					
+					
 					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
 						if (index++ == 0)
 							continue;
-						projectMonthlyPlcc = new ProjectMonthlyPlcc(fileUploadPayload.getMonth(), fileUploadPayload.getYear(), getCurrentLoginUserId(),"Y" );
 						
+						projectMonthlyPlcc = new ProjectMonthlyPlcc(fileUploadPayload.getFileUploadDate(), getCurrentLoginUserId(),  activeC);
+												
 						if (row.getCell(totalRevenueAmountCellNo) != null && row.getCell(totalRevenueAmountCellNo).getCellType() == CellType.NUMERIC) {
 							projectMonthlyPlcc.setTotalRevenueAmount(row.getCell(totalRevenueAmountCellNo).getNumericCellValue());							
 						}
@@ -91,7 +94,7 @@ public class ProjectMonthlyPlccServiceImpl extends UserLoginBaseService implemen
 						}
 						
 						if (row.getCell(projectCodeCellNo) != null && row.getCell(projectCodeCellNo).getCellType() == CellType.STRING) {
-							projectCodeMstr =dataLoader.getProjectCodeMstrMap().get(row.getCell(projectCodeCellNo).getStringCellValue().trim());
+							projectCodeMstr = dataLoader.getProjectCodeMstrMap().get(row.getCell(projectCodeCellNo).getStringCellValue().trim());
 							//System.out.println("Coming project code from excel = "+row.getCell(projectCodeCellNo).getStringCellValue().trim());
 							
 							projectMonthlyPlcc.setProjectCodeId(projectCodeMstr.getId());
@@ -132,7 +135,7 @@ public class ProjectMonthlyPlccServiceImpl extends UserLoginBaseService implemen
 			//Before saving, must update each record of the list with this file-reference-id.
 			List<ProjectMonthlyPlcc> updatedMonthlyPlccListReadFromExcel = updateFileReferenceOfAllRecordsInList(fileReference.getId(),monthlyPlccListReadFromExcel);			
 			//Start file movement				
-				List<ProjectMonthlyPlcc> readProjectMonthlyPlccList = projectMonthlyPlccRepo.getAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear());	
+				List<ProjectMonthlyPlcc> readProjectMonthlyPlccList = projectMonthlyPlccRepo.getAllByMonthAndYear(fileUploadPayload.getFileUploadDate());	
 				if(readProjectMonthlyPlccList.size()!=0) {					
 					savedProjectMonthlyPlcc = moveFileFromMainToHistoryTable(readProjectMonthlyPlccList,updatedMonthlyPlccListReadFromExcel);
 			}//End of records availability check
@@ -173,8 +176,7 @@ public class ProjectMonthlyPlccServiceImpl extends UserLoginBaseService implemen
 			   hprojectMonthlyPlcc.setMarginAmount(projectMonthlyPlcc.getMarginAmount());
 			   hprojectMonthlyPlcc.setFte(projectMonthlyPlcc.getFte());
 			   hprojectMonthlyPlcc.setProjectCodeId(projectMonthlyPlcc.getProjectCodeId());
-			   hprojectMonthlyPlcc.setPlccMonth(projectMonthlyPlcc.getPlccMonth());
-			   hprojectMonthlyPlcc.setPlccYear(projectMonthlyPlcc.getPlccYear());
+			   hprojectMonthlyPlcc.setFileUploadDate(projectMonthlyPlcc.getFileUploadDate());			   
 			   hprojectMonthlyPlcc.setCreatedBy(projectMonthlyPlcc.getCreatedBy());			   
 			   hprojectMonthlyPlcc.setCreatedOn(projectMonthlyPlcc.getCreatedOn());			   
 			   hprojectMonthlyPlcc.setModifiedBy(projectMonthlyPlcc.getModifiedBy());
@@ -191,6 +193,15 @@ public class ProjectMonthlyPlccServiceImpl extends UserLoginBaseService implemen
 		for(ProjectMonthlyPlcc projectMonthlyPlcc:projectMonthlyPlccList) {
 			projectMonthlyPlcc.setFileReferenceId(fileReferenceId);
 		}		
+		return projectMonthlyPlccList;
+	}
+
+	@Override
+	public List<ProjectMonthlyPlcc> getMonthlyPlccBetweenMonths(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate) {
+		
+		List<ProjectMonthlyPlcc> projectMonthlyPlccList = 
+				projectMonthlyPlccRepo.getMonthlyPlccDataBetweenMonths(projectCodeId,fFileUploadDate,tFileUploadDate);
+		
 		return projectMonthlyPlccList;
 	}
 

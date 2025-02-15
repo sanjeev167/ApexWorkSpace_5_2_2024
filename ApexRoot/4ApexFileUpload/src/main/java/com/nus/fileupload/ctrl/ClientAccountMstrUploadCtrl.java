@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,6 @@ import com.nus.exception.ExcelFileReadingException;
 import com.nus.fileupload.model.FileUploadPayload;
 import com.nus.fileupload.service.ClientAccountMstrUploadService;
 import com.nus.pvt.master.entities.ClientAccountMstr;
-import com.nus.sec.service.ApexUserService;
 
 /**
  * @Author: SanjeevKumar<br>
@@ -32,19 +32,19 @@ import com.nus.sec.service.ApexUserService;
 @Validated
 @RestController
 @RequestMapping("/file/v1")
-public class ClientAccountMstrUploadCtrl extends ApexBaseCtrl{
-	
-	@Autowired
-	ApexUserService apexUserService;
+public class ClientAccountMstrUploadCtrl extends ApexBaseCtrl{	
 	
 	@Autowired
 	ClientAccountMstrUploadService clientAccountMstrUploadService;
 	
 	@RequestMapping("/clientAccounts")
 	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+	@PreAuthorize("hasAnyAuthority('ROLE_SUPER','ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> upload( @Validated @RequestParam("file") MultipartFile file, @RequestParam("month") Integer month,@RequestParam("year") Integer year) {
        
-		FileUploadPayload fileUploadPayload = new FileUploadPayload(month, year, file);
+		FileUploadPayload fileUploadPayload = new FileUploadPayload(file);
+		
+		
 	    List<ClientAccountMstr> clientAccountMstrUploadList = new ArrayList<ClientAccountMstr>();
 		
 			try {

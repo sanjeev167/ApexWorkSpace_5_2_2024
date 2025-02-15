@@ -3,6 +3,7 @@ package com.nus.fileupload.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -81,7 +82,7 @@ public class MonthlyCustomerSatisfactionServiceImpl extends UserLoginBaseService
 							for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
 								if (index++ == 0)
 									continue;
-								customerSatisfaction = new CustomerSatisfaction(fileUploadPayload.getMonth(), fileUploadPayload.getYear(), getCurrentLoginUserId(),"Y" );
+								customerSatisfaction = new CustomerSatisfaction(fileUploadPayload.getFileUploadDate(), getCurrentLoginUserId(),"Y" );
 															
 								if (row.getCell(projectCodeCellNo) != null && row.getCell(projectCodeCellNo).getCellType() == CellType.STRING) {
 									projectCodeMstr =dataLoader.getProjectCodeMstrMap().get(row.getCell(projectCodeCellNo).getStringCellValue().trim());
@@ -142,7 +143,7 @@ public class MonthlyCustomerSatisfactionServiceImpl extends UserLoginBaseService
 			//Before saving new record, must update each record of the list with this file-reference-id.
 			List<CustomerSatisfaction> updatedCustomerSatisfactionListReadFromExcel = updateFileReferenceOfAllRecordsInList(fileReference.getId(),customerSatisfactionListReadFromExcel);			
 			//Start file movement				
-				List<CustomerSatisfaction> readExistingCustomerSatisfactionList = monthlyCustomerSatisfactionRepo.getAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear());	
+				List<CustomerSatisfaction> readExistingCustomerSatisfactionList = monthlyCustomerSatisfactionRepo.getAllByMonthAndYear(fileUploadPayload.getFileUploadDate());	
 				if(readExistingCustomerSatisfactionList.size()!=0) {	//Check whether file movement is required or not				
 					savedCustomerSatisfactionList = moveFileFromMainToHistoryTable(readExistingCustomerSatisfactionList,updatedCustomerSatisfactionListReadFromExcel);
 			}//End of records availability check
@@ -176,9 +177,9 @@ public class MonthlyCustomerSatisfactionServiceImpl extends UserLoginBaseService
 			hcustomerSatisfaction.setCsatClientMailInitiated(customerSatisfaction.getCsatClientMailInitiated());			
 			hcustomerSatisfaction.setCsatReceivedDate(customerSatisfaction.getCsatReceivedDate());			
 			hcustomerSatisfaction.setRating(customerSatisfaction.getRating());			
-			hcustomerSatisfaction.setProjectCodeId(customerSatisfaction.getProjectCodeId());			
-			hcustomerSatisfaction.setCsatMonth(customerSatisfaction.getCsatMonth());
-			hcustomerSatisfaction.setCsatYear(customerSatisfaction.getCsatYear());			
+			hcustomerSatisfaction.setProjectCodeId(customerSatisfaction.getProjectCodeId());
+			hcustomerSatisfaction.setFileUploadDate(customerSatisfaction.getFileUploadDate());
+			
 			hcustomerSatisfaction.setCreatedBy(customerSatisfaction.getCreatedBy());			   
 			hcustomerSatisfaction.setCreatedOn(customerSatisfaction.getCreatedOn());			   
 			hcustomerSatisfaction.setModifiedBy(customerSatisfaction.getModifiedBy());
@@ -200,6 +201,14 @@ public class MonthlyCustomerSatisfactionServiceImpl extends UserLoginBaseService
 
 	@Override
 	public void generateExcel(HttpServletResponse response, String fileName) {		
+	}
+
+	@Override
+	public List<CustomerSatisfaction> getMonthlyCustomerSatisfactionBetweenMonths(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate) {
+		List<CustomerSatisfaction> customerSatisfactionBetweenMonthsList = 
+		monthlyCustomerSatisfactionRepo.getMonthlyCustomerSatisfactionBetweenMonths(projectCodeId, fFileUploadDate,tFileUploadDate);
+		
+		return customerSatisfactionBetweenMonthsList;
 	}
 	
 }//End of MonthlyCustomerSatisfactionServiceImpl

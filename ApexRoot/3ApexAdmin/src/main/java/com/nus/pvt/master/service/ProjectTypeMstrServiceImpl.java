@@ -31,7 +31,7 @@ public class ProjectTypeMstrServiceImpl extends UserLoginBaseService implements 
 			projectTypeMstrEntity.setProjectType(projectTypeMstrModel.getProjectType());
 			projectTypeMstrEntity.setCreatedOn(currentDate);
 			projectTypeMstrEntity.setCreatedBy(getCurrentLoginUserId());
-			projectTypeMstrEntity.setActiveC("Y");
+			projectTypeMstrEntity.setActiveC(activeC);
 			savedProjectTypeMstrEntity = projectTypeMstrRepo.save(projectTypeMstrEntity);
 		} catch (Exception ex) {
 			throw ex;

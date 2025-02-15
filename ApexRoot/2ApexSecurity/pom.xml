@@ -11,8 +11,8 @@
   <description>This is a security module which contains all the security related configuration.</description>
   <dependencies>
 	<dependency>
-		<groupId>com.nus.util</groupId>
-        <artifactId>1ApexUtil</artifactId>
+		<groupId>com.nus.common</groupId>
+        <artifactId>1ApexCommon</artifactId>
         <version>${project.version}</version>	
 	</dependency>
   </dependencies>

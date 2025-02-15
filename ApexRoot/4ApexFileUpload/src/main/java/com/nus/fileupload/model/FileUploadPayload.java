@@ -2,10 +2,12 @@
 package com.nus.fileupload.model;
 
 import java.nio.file.Path;
+import java.util.Date;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nus.sec.service.CustomUserDetails;
 
@@ -15,9 +17,9 @@ import com.nus.sec.service.CustomUserDetails;
  * @Time: 5:52:37 pm<br>
  * @Objective: <br>
  */
-public class FileUploadPayload {
-	private Integer month;
-	private Integer year;
+public class FileUploadPayload {	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	private Date    fileUploadDate ;
 	@JsonIgnore
 	private MultipartFile file;	
 	@JsonIgnore
@@ -29,10 +31,10 @@ public class FileUploadPayload {
 	private String fileType;
 	private String fileName;
 	private Path fileServerPath;
+	private int userTypeId;
 	
-	public FileUploadPayload(Integer month, Integer year, MultipartFile file) {
-		this.month = month;
-		this.year = year;
+	public FileUploadPayload(Date fileUploadDate, MultipartFile file) {
+		this.fileUploadDate = fileUploadDate;		
 		this.file = file;
 		this.userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 		this.userName = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsernameInDb();
@@ -44,137 +46,83 @@ public class FileUploadPayload {
 		this.userName = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsernameInDb();
 		this.loginId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail();
 	}
-	public FileUploadPayload(Integer month, Integer year, MultipartFile file, String fileName, int fileTypeId) {
-		this.month = month;
-		this.year = year;
+	public FileUploadPayload(MultipartFile file,int userTypeId) {
+		this.file = file;
+		this.userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+		this.userName = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsernameInDb();
+		this.loginId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail();
+	    this.userTypeId = userTypeId;
+	}
+	public FileUploadPayload(Date fileUploadDate, MultipartFile file, String fileName, int fileTypeId) {
+		this.fileUploadDate = fileUploadDate;		
 		this.file = file;
 		this.userId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 		this.fileName = fileName;
 		this.fileTypeId = fileTypeId;
 		this.userName = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsernameInDb();
 		this.loginId = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail();
+		
+	
 	}
-	/**
-	 * @return the month
-	 */
-	public Integer getMonth() {
-		return month;
+	
+	public Date getFileUploadDate() {
+		return fileUploadDate;
 	}
-	/**
-	 * @param month the month to set
-	 */
-	public void setMonth(Integer month) {
-		this.month = month;
+	public void setFileUploadDate(Date fileUploadDate) {
+		this.fileUploadDate = fileUploadDate;
 	}
-	/**
-	 * @return the year
-	 */
-	public Integer getYear() {
-		return year;
-	}
-	/**
-	 * @param year the year to set
-	 */
-	public void setYear(Integer year) {
-		this.year = year;
-	}
-	/**
-	 * @return the file
-	 */
 	public MultipartFile getFile() {
 		return file;
 	}
-	/**
-	 * @param file the file to set
-	 */
 	public void setFile(MultipartFile file) {
 		this.file = file;
 	}
-	/**
-	 * @return the userId
-	 */
 	public int getUserId() {
 		return userId;
 	}
-	/**
-	 * @param userId the userId to set
-	 */
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-	/**
-	 * @return the fileTypeId
-	 */
-	public int getFileTypeId() {
-		return fileTypeId;
-	}
-	/**
-	 * @param fileTypeId the fileTypeId to set
-	 */
-	public void setFileTypeId(int fileTypeId) {
-		this.fileTypeId = fileTypeId;
-	}
-	/**
-	 * @return the fileName
-	 */
-	public String getFileName() {
-		return fileName;
-	}
-	/**
-	 * @param fileName the fileName to set
-	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-	/**
-	 * @return the fileServerPath
-	 */
-	public Path getFileServerPath() {
-		return fileServerPath;
-	}
-	/**
-	 * @param fileServerPath the fileServerPath to set
-	 */
-	public void setFileServerPath(Path fileServerPath) {
-		this.fileServerPath = fileServerPath;
-	}
-	/**
-	 * @return the fileType
-	 */
-	public String getFileType() {
-		return fileType;
-	}
-	/**
-	 * @param fileType the fileType to set
-	 */
-	public void setFileType(String fileType) {
-		this.fileType = fileType;
-	}
-	/**
-	 * @return the userName
-	 */
 	public String getUserName() {
 		return userName;
 	}
-	/**
-	 * @param userName the userName to set
-	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	/**
-	 * @return the loginId
-	 */
 	public String getLoginId() {
 		return loginId;
 	}
-	/**
-	 * @param loginId the loginId to set
-	 */
 	public void setLoginId(String loginId) {
 		this.loginId = loginId;
 	}
-	
-	
-	
+	public int getFileTypeId() {
+		return fileTypeId;
+	}
+	public void setFileTypeId(int fileTypeId) {
+		this.fileTypeId = fileTypeId;
+	}
+	public String getFileType() {
+		return fileType;
+	}
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public Path getFileServerPath() {
+		return fileServerPath;
+	}
+	public void setFileServerPath(Path fileServerPath) {
+		this.fileServerPath = fileServerPath;
+	}
+	public int getUserTypeId() {
+		return userTypeId;
+	}
+	public void setUserTypeId(int userTypeId) {
+		this.userTypeId = userTypeId;
+	}	
 }

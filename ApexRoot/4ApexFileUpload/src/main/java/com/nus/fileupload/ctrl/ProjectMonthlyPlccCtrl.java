@@ -2,11 +2,13 @@ package com.nus.fileupload.ctrl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,36 +34,39 @@ import com.nus.sec.service.ApexUserService;
 @Validated
 @RestController
 @RequestMapping("/file/v1")
-public class ProjectMonthlyPlccCtrl extends ApexBaseCtrl{
-	
+public class ProjectMonthlyPlccCtrl extends ApexBaseCtrl {
+
 	@Autowired
 	ApexUserService apexUserService;
-	
+
 	@Autowired
-	ProjectMonthlyPlccService projectMonthlyPlccService;	
+	ProjectMonthlyPlccService projectMonthlyPlccService;
 
 	@RequestMapping("/plcc")
-	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ApiResponse> upload( @Validated @RequestParam("file") MultipartFile file, @RequestParam("month") Integer month,@RequestParam("year") Integer year) throws DataIntegrityViolationException, IOException, Exception {
-       
-		FileUploadPayload fileUploadPayload = new FileUploadPayload(month, year, file,file.getName(),1);
-	    List<ProjectMonthlyPlcc>projectMonthlyPlccList = new ArrayList<ProjectMonthlyPlcc>();		
-			try {
-				projectMonthlyPlccList = projectMonthlyPlccService.readExcel(fileUploadPayload);
-			} catch (IOException e) {				
-				throw new ExcelFileReadingException("Problem in reading excel file.");
-			}
-			if(projectMonthlyPlccList!=null) {				
-				projectMonthlyPlccList = projectMonthlyPlccService.saveExcel(projectMonthlyPlccList,fileUploadPayload);				
-				apiReq=makeApiMetaData();
-				apiReq.setPayLoad(fileUploadPayload);
-				//Return response in a pre-defined format	       	
-				apiResponse=makeSuccessResponse(projectMonthlyPlccList,apiReq);		
-				return ResponseEntity.ok().body(apiResponse);
-			}else {				
-				throw new DataIntegrityViolationException("No ProjectMonthlyPlcc is added due to data intigrity issues.");
-			}			
-    }
+	@PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PreAuthorize("hasAnyAuthority('ROLE_SUPER','ROLE_ADMIN')")
+	public ResponseEntity<ApiResponse> upload(@Validated @RequestParam("file") MultipartFile file,
+			@RequestParam("fileUploadDate") String fileUploadDate)
+			throws DataIntegrityViolationException, IOException, Exception {
+		
+		FileUploadPayload fileUploadPayload = new FileUploadPayload(dateFormatter.parse(fileUploadDate), file, file.getName(), 1);
+				
+		List<ProjectMonthlyPlcc> projectMonthlyPlccList = new ArrayList<ProjectMonthlyPlcc>();
+		try {
+			projectMonthlyPlccList = projectMonthlyPlccService.readExcel(fileUploadPayload);
+		} catch (IOException e) {
+			throw new ExcelFileReadingException("Problem in reading excel file.");
+		}
+		if (projectMonthlyPlccList != null) {
+			projectMonthlyPlccList = projectMonthlyPlccService.saveExcel(projectMonthlyPlccList, fileUploadPayload);
+			apiReq = makeApiMetaData();
+			apiReq.setPayLoad(fileUploadPayload);
+			// Return response in a pre-defined format
+			apiResponse = makeSuccessResponse(projectMonthlyPlccList, apiReq);
+			return ResponseEntity.ok().body(apiResponse);
+		} else {
+			throw new DataIntegrityViolationException("No ProjectMonthlyPlcc is added due to data intigrity issues.");
+		}
+	}
 
-
-}//End of ProjectMonthlyPlccCtrl
+}// End of ProjectMonthlyPlccCtrl

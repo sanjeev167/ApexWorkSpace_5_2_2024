@@ -1,8 +1,13 @@
 
 package com.nus;
 
+import java.util.TimeZone;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import jakarta.annotation.PostConstruct;
 
 /**
  * @Author: SanjeevKumar<br>
@@ -13,10 +18,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ApexMainApplication {
 
+	@Value("${application.timezone}")
+    private String applicationTimeZone;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
 		SpringApplication.run(ApexMainApplication.class, args);
 
 	}
-
+	@PostConstruct
+    public void executeAfterMain() {
+        TimeZone.setDefault(TimeZone.getTimeZone(applicationTimeZone));     
+    }
 }

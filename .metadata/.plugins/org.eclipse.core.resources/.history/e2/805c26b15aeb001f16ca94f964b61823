@@ -1,0 +1,16 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.nus.root</groupId>
+  <artifactId>ApexRoot</artifactId>
+  <version>0.0.0.0</version>
+  <packaging>pom</packaging>
+  <name>ApexRoot</name>
+  <description>Root project</description>
+  <modules>
+  	<module>1ApexCommon</module>
+  	<module>2ApexSecurity</module>
+  	
+  	<module>4ApexFileUpload</module>
+  	<module>3ApexAdmin</module>
+  </modules>
+</project>

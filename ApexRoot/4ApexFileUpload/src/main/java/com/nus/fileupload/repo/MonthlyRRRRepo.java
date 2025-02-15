@@ -1,5 +1,6 @@
 package com.nus.fileupload.repo;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +18,22 @@ import com.nus.fileupload.entities.ProjectMonthlyRrrr;
 @Repository
 public interface MonthlyRRRRepo extends JpaRepository<ProjectMonthlyRrrr, Integer>{
 
-	@Query(value = "SELECT * FROM project_monthly_rrrr WHERE rrrr_month =?1 AND rrrr_year =?2", nativeQuery = true)
-	List<ProjectMonthlyRrrr> getAllByMonthAndYear(int month, int year);	
+	@Query(value = "SELECT * FROM project_monthly_rrrr WHERE file_upload_date =?1", nativeQuery = true)	
+	List<ProjectMonthlyRrrr> getAllByMonthAndYear(Date fileUploadDate);	
+
+	@Query(value = "SELECT * FROM project_monthly_rrrr WHERE project_code_id=?1"
+			                                       + " AND file_upload_date >=?2 AND file_upload_date <=?3", nativeQuery = true)	
+	List<ProjectMonthlyRrrr> getMonthlyRRRRBetweenMonths(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate);
+
+	@Query(value = "SELECT  COUNT(expected_rate) FROM project_monthly_rrrr WHERE project_code_id=?1"
+                                               + " AND file_upload_date >=?2 AND file_upload_date <=?3"
+                                               + " AND expected_rate>0", nativeQuery = true)
+	Integer getMonthlyExpectedIncreasePM_RRRR(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate);
+
+	@Query(value = "SELECT  * FROM project_monthly_rrrr WHERE project_code_id=?1"
+            + " AND file_upload_date >=?2 AND file_upload_date <=?3"
+            + " AND expected_rate>0", nativeQuery = true)
+	List<ProjectMonthlyRrrr> getRRRRPotentialRevenuePerMonth(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate);
+
+	
 }

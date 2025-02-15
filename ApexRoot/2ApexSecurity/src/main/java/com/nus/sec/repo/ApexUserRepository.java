@@ -1,5 +1,6 @@
 package com.nus.sec.repo;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,8 @@ import com.nus.sec.entities.ApexUser;
 @Repository
 public interface ApexUserRepository extends JpaRepository<ApexUser, Integer>{
 
-	Optional<ApexUser> findByEmail(String email);	
+	Optional<ApexUser> findByEmail(String email);
+
+	List<ApexUser> findAllByActiveC(String string);	
 }//End of ApexUserRepository
 

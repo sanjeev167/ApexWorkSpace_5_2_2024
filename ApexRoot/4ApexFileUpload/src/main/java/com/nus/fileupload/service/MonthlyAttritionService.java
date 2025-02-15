@@ -1,6 +1,7 @@
 package com.nus.fileupload.service;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import com.nus.exception.DataIntegrityViolationException;
@@ -21,6 +22,11 @@ public interface MonthlyAttritionService {
 	
 	public List<ProjectMonthlyResourceAttrition> saveExcel(List<ProjectMonthlyResourceAttrition> monthlyResourceAttritionListReadFromExcel,FileUploadPayload fileUploadPayload)throws DataIntegrityViolationException, IOException, Exception;
 	
+	public List<ProjectMonthlyResourceAttrition> getMonthlyResourceAttritionDataBetweenMonths(int projectCodeId,
+			Date fFileUploadDate,Date tFileUploadDate);
+	
 	public void generateExcel(HttpServletResponse response, String fileName)throws Exception;
+
+	public List<ProjectMonthlyResourceAttrition> getAMonthSpecificAttrition(Integer projectCodeId, Date currentMonthYearDate);
 
 }//End of MonthlyAttritionService

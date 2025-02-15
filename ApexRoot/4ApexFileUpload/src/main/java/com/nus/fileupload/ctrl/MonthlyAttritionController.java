@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,37 +33,42 @@ import com.nus.sec.service.ApexUserService;
 @Validated
 @RestController
 @RequestMapping("/file/v1")
-public class MonthlyAttritionController extends ApexBaseCtrl{
-	
+public class MonthlyAttritionController extends ApexBaseCtrl {
+
 	@Autowired
 	ApexUserService apexUserService;
-	
+
 	@Autowired
 	MonthlyAttritionService monthlyAttritionService;
-	
 
 	@RequestMapping("/attritions")
-	@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ApiResponse> upload( @Validated @RequestParam("file") MultipartFile file, @RequestParam("month") Integer month,@RequestParam("year") Integer year) throws DataIntegrityViolationException, IOException, Exception {
-       
-		FileUploadPayload fileUploadPayload = new FileUploadPayload(month, year, file,file.getName(),5);
-	    List<ProjectMonthlyResourceAttrition> projectMonthlyResourceAttritionList = new ArrayList<ProjectMonthlyResourceAttrition>();
+	@PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PreAuthorize("hasAnyAuthority('ROLE_SUPER','ROLE_ADMIN')")
+	public ResponseEntity<ApiResponse> upload(@Validated @RequestParam("file") MultipartFile file,
+			@RequestParam("fileUploadDate") String fileUploadDate)
+			throws DataIntegrityViolationException, IOException, Exception {
 		
-			try {
-				projectMonthlyResourceAttritionList = monthlyAttritionService.readExcel(fileUploadPayload);
-			} catch (IOException e) {
-				throw new ExcelFileReadingException("Problem in reading excel file.");
-			}
-			if(projectMonthlyResourceAttritionList!=null) {
-				projectMonthlyResourceAttritionList = monthlyAttritionService.saveExcel(projectMonthlyResourceAttritionList, fileUploadPayload);
-				apiReq=makeApiMetaData();
-				apiReq.setPayLoad(fileUploadPayload);
-				//Return response in a pre-defined format	       	
-				apiResponse=makeSuccessResponse(projectMonthlyResourceAttritionList,apiReq);		
-				return ResponseEntity.ok().body(apiResponse);
-			}else {
-				throw new DataIntegrityViolationException("No ProjectMonthlyResourceAttrition is added due to data intigrity issues.");
-			}			
-    }
+		FileUploadPayload fileUploadPayload = new FileUploadPayload(dateFormatter.parse(fileUploadDate), file, file.getName(), 5);
 
-}//End of MonthlyAttritionController
+		List<ProjectMonthlyResourceAttrition> projectMonthlyResourceAttritionList = new ArrayList<ProjectMonthlyResourceAttrition>();
+
+		try {
+			projectMonthlyResourceAttritionList = monthlyAttritionService.readExcel(fileUploadPayload);
+		} catch (IOException e) {
+			throw new ExcelFileReadingException("Problem in reading excel file.");
+		}
+		if (projectMonthlyResourceAttritionList != null) {
+			projectMonthlyResourceAttritionList = monthlyAttritionService.saveExcel(projectMonthlyResourceAttritionList,
+					fileUploadPayload);
+			apiReq = makeApiMetaData();
+			apiReq.setPayLoad(fileUploadPayload);
+			// Return response in a pre-defined format
+			apiResponse = makeSuccessResponse(projectMonthlyResourceAttritionList, apiReq);
+			return ResponseEntity.ok().body(apiResponse);
+		} else {
+			throw new DataIntegrityViolationException(
+					"No ProjectMonthlyResourceAttrition is added due to data intigrity issues.");
+		}
+	}
+
+}// End of MonthlyAttritionController

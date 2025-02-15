@@ -11,6 +11,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.nus.api.struct.ApiHead;
 import com.nus.api.struct.ApiRequest;
 import com.nus.api.struct.ApiResponse;
+import com.nus.base.service.UserLoginBaseService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -20,7 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * @Time: 7:31:43 am<br>
  * @Objective: <br>
  */
-public class ApexBaseCtrl {
+public class ApexBaseCtrl extends UserLoginBaseService{
 		
 	protected String dateFormatUsed = "dd-MM-yyyy HH:mm:ss";
 	protected ApiRequest apiReq = null;
@@ -49,14 +50,15 @@ public class ApexBaseCtrl {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(dateFormatUsed);
 		LocalDateTime now = LocalDateTime.now();
 		String apiCallReceived = dtf.format(now);
-		String apiCallResponded =  dtf.format(LocalDateTime.now());		
-		
+		String apiCallResponded =  dtf.format(LocalDateTime.now());			
 	    apiReq = new ApiRequest( apiUrl,
 	    		                methodName, 	    		                
 	    		                contentTypeRcvd, 
 	    		                contentTypeRsp, 
 	    		                apiCallReceived,
-	    		                apiCallResponded);
+	    		                apiCallResponded,
+	    		                apiUser);
+	    
 		}catch(Exception ex) {ex.printStackTrace();}
 		return apiReq;
 		

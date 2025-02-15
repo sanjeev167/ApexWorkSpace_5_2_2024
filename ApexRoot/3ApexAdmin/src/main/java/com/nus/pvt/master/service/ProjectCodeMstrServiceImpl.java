@@ -1,12 +1,9 @@
 package com.nus.pvt.master.service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.nus.base.service.UserLoginBaseService;

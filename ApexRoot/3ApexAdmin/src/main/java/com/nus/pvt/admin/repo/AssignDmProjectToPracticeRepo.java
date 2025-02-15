@@ -1,6 +1,8 @@
 package com.nus.pvt.admin.repo;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.nus.pvt.admin.entities.AssignDmProjectToPractice;
@@ -12,6 +14,7 @@ import com.nus.pvt.admin.entities.AssignDmProjectToPractice;
  * @Objective: <br>
  */
 @Repository
-public interface AssignDmProjectToPracticeRepo extends CrudRepository<AssignDmProjectToPractice, Integer> {
-
+public interface AssignDmProjectToPracticeRepo extends JpaRepository<AssignDmProjectToPractice, Integer> {
+	
+	List<AssignDmProjectToPractice> findAllByActiveC(String activeC);
 }

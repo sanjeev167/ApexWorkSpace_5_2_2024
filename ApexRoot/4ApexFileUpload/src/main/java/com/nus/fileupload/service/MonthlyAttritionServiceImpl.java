@@ -3,6 +3,7 @@ package com.nus.fileupload.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -72,8 +73,7 @@ public class MonthlyAttritionServiceImpl extends UserLoginBaseService implements
 		int employementStatusCellNo = 9;
 		int lwdCellNo = 10;
 		int unitCellNo = 11;								
-		int attritionTypeCellNo=12;	//String => Checked	
-		//int attritionValueCellNo = 0;// not required. Double attritionValue; Calculation based column	
+		int attritionTypeCellNo=12;	
 		
 		List<ProjectMonthlyResourceAttrition> monthlyResourceAttritionListReadFromExcel = new ArrayList<ProjectMonthlyResourceAttrition>();
 		Workbook workbook = null;
@@ -91,7 +91,8 @@ public class MonthlyAttritionServiceImpl extends UserLoginBaseService implements
 					for (Row row : sheet) {// Now, start reading each cell one by one in a selected row.
 						if (index++ == 0)
 							continue;
-						projectMonthlyResourceAttrition = new ProjectMonthlyResourceAttrition(fileUploadPayload.getMonth(), fileUploadPayload.getYear(), getCurrentLoginUserId(),currentDate,"Y" );
+						projectMonthlyResourceAttrition = 
+								new ProjectMonthlyResourceAttrition(fileUploadPayload.getFileUploadDate(), getCurrentLoginUserId(),currentDate,"Y" );
 						
 						if (row.getCell(empCodeCellNo) != null && row.getCell(empCodeCellNo).getCellType() == CellType.STRING) {
 							projectMonthlyResourceAttrition.setEmpCode(row.getCell(empCodeCellNo).getStringCellValue());
@@ -178,7 +179,7 @@ public class MonthlyAttritionServiceImpl extends UserLoginBaseService implements
 			//Before saving new record, must update each record of the list with this file-reference-id.
 			List<ProjectMonthlyResourceAttrition> updatedMonthlyResourceAttritionListReadFromExcel = updateFileReferenceOfAllRecordsInList(fileReference.getId(),monthlyResourceAttritionListReadFromExcel);			
 			//Start file movement				
-				List<ProjectMonthlyResourceAttrition> readExistingMonthlyResourceAttritionList = monthlyAttritionRepo.getAllByMonthAndYear(fileUploadPayload.getMonth(), fileUploadPayload.getYear());	
+				List<ProjectMonthlyResourceAttrition> readExistingMonthlyResourceAttritionList = monthlyAttritionRepo.getAllByMonthAndYear(fileUploadPayload.getFileUploadDate());	
 				if(readExistingMonthlyResourceAttritionList.size()!=0) {	//Check whether file movement is required or not				
 					savedMonthlyResourceAttritionList = moveFileFromMainToHistoryTable(readExistingMonthlyResourceAttritionList,updatedMonthlyResourceAttritionListReadFromExcel);
 			}//End of records availability check
@@ -226,8 +227,9 @@ public class MonthlyAttritionServiceImpl extends UserLoginBaseService implements
 			hprojectMonthlyResourceAttrition.setAttritionType(projectMonthlyResourceAttrition.getAttritionType());						
 			
 			hprojectMonthlyResourceAttrition.setProjectCodeId(projectMonthlyResourceAttrition.getProjectCodeId());			
-			hprojectMonthlyResourceAttrition.setResourceAttritionMonth(projectMonthlyResourceAttrition.getResourceAttritionMonth());
-			hprojectMonthlyResourceAttrition.setResourceAttritionYear(projectMonthlyResourceAttrition.getResourceAttritionYear());			
+			
+			hprojectMonthlyResourceAttrition.setFileUploadDate(projectMonthlyResourceAttrition.getFileUploadDate());
+			
 			hprojectMonthlyResourceAttrition.setCreatedBy(projectMonthlyResourceAttrition.getCreatedBy());			   
 			hprojectMonthlyResourceAttrition.setCreatedOn(projectMonthlyResourceAttrition.getCreatedOn());			   
 			hprojectMonthlyResourceAttrition.setModifiedBy(projectMonthlyResourceAttrition.getModifiedBy());
@@ -252,6 +254,21 @@ public class MonthlyAttritionServiceImpl extends UserLoginBaseService implements
 	@Override
 	public void generateExcel(HttpServletResponse response, String fileName) throws Exception{
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<ProjectMonthlyResourceAttrition> getMonthlyResourceAttritionDataBetweenMonths(int projectCodeId,
+			Date fFileUploadDate,Date tFileUploadDate) {
+		List<ProjectMonthlyResourceAttrition> monthlyResourceAttritionList= 
+				monthlyAttritionRepo.getMonthlyAttritionDataBetweenMonths(projectCodeId, fFileUploadDate, tFileUploadDate);
+		return monthlyResourceAttritionList;
+	}
+
+	@Override
+	public List<ProjectMonthlyResourceAttrition> getAMonthSpecificAttrition(Integer projectCodeId, Date currentMonthYearDate) {
+		
+		return monthlyAttritionRepo.getAMonthSpecificAttrition(projectCodeId, currentMonthYearDate);
 		
 	}
 

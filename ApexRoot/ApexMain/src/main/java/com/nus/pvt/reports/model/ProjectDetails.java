@@ -21,14 +21,14 @@ public class ProjectDetails extends BaseModel {
 	// Numeral data project-wise
 	private double yTDFte;	
 	private double yTDRevenue;
-	private String yTDPmPercent;
+	private String yTDPm;
 	private double revenuePerFTE;
 	private double costPerFTE;
 	
-	private String yTDUtilPercent;
-	private String twoMonthBackMonthUtilPercent;
-	private String yTDAttritionPercent;
-	private String currentAttritionPercent;
+	private String yTDUtilization;
+	private String utilizationB4TwoMonth;
+	private String yTDAttrition;
+	private String currentAttrition;
 	
 	private String span_1;
 	private Integer spanRAGCalc;
@@ -100,35 +100,11 @@ public class ProjectDetails extends BaseModel {
 	public void setyTDRevenue(double yTDRevenue) {
 		this.yTDRevenue = yTDRevenue;
 	}
-	public String getyTDPmPercent() {
-		return yTDPmPercent;
+	public String getyTDPm() {
+		return yTDPm;
 	}
-	public void setyTDPmPercent(String yTDPmPercent) {
-		this.yTDPmPercent = yTDPmPercent;
-	}
-	public String getyTDUtilPercent() {
-		return yTDUtilPercent;
-	}
-	public void setyTDUtilPercent(String yTDUtilPercent) {
-		this.yTDUtilPercent = yTDUtilPercent;
-	}
-	public String getTwoMonthBackMonthUtilPercent() {
-		return twoMonthBackMonthUtilPercent;
-	}
-	public void setTwoMonthBackMonthUtilPercent(String twoMonthBackMonthUtilPercent) {
-		this.twoMonthBackMonthUtilPercent = twoMonthBackMonthUtilPercent;
-	}
-	public String getyTDAttritionPercent() {
-		return yTDAttritionPercent;
-	}
-	public void setyTDAttritionPercent(String yTDAttritionPercent) {
-		this.yTDAttritionPercent = yTDAttritionPercent;
-	}
-	public String getCurrentAttritionPercent() {
-		return currentAttritionPercent;
-	}
-	public void setCurrentAttritionPercent(String currentAttritionPercent) {
-		this.currentAttritionPercent = currentAttritionPercent;
+	public void setyTDPm(String yTDPm) {
+		this.yTDPm = yTDPm;
 	}
 	public double getRevenuePerFTE() {
 		return revenuePerFTE;
@@ -141,6 +117,30 @@ public class ProjectDetails extends BaseModel {
 	}
 	public void setCostPerFTE(double costPerFTE) {
 		this.costPerFTE = costPerFTE;
+	}
+	public String getyTDUtilization() {
+		return yTDUtilization;
+	}
+	public void setyTDUtilization(String yTDUtilization) {
+		this.yTDUtilization = yTDUtilization;
+	}
+	public String getUtilizationB4TwoMonth() {
+		return utilizationB4TwoMonth;
+	}
+	public void setUtilizationB4TwoMonth(String utilizationB4TwoMonth) {
+		this.utilizationB4TwoMonth = utilizationB4TwoMonth;
+	}
+	public String getyTDAttrition() {
+		return yTDAttrition;
+	}
+	public void setyTDAttrition(String yTDAttrition) {
+		this.yTDAttrition = yTDAttrition;
+	}
+	public String getCurrentAttrition() {
+		return currentAttrition;
+	}
+	public void setCurrentAttrition(String currentAttrition) {
+		this.currentAttrition = currentAttrition;
 	}
 	public String getSpan_1() {
 		return span_1;
@@ -196,6 +196,7 @@ public class ProjectDetails extends BaseModel {
 	public void setBgvRequired(String bgvRequired) {
 		this.bgvRequired = bgvRequired;
 	}
+	
 	
 	
 }

@@ -15,10 +15,7 @@ public class ResourceAllocationModel {
 		this.emp_code = emp_code;
 		this.allocation_percentage = allocation_percentage;
 	}
-	public ResourceAllocationModel() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
 	private String emp_code;
 	private double allocation_percentage;
 	public String getEmp_code() {

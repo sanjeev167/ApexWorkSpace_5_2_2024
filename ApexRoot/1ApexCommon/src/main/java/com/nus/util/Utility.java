@@ -68,7 +68,7 @@ public class Utility {
         if (monthNumber < 1 || monthNumber > 12) {
             throw new IllegalArgumentException("Month number must be between 1 and 12");
         }
-        return Month.of(monthNumber).getDisplayName(TextStyle.FULL, Locale.getDefault());
+        return Month.of(monthNumber).getDisplayName(TextStyle.SHORT, Locale.getDefault());
     }	
 
 	

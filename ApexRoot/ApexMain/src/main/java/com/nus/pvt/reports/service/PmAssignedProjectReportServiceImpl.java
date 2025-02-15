@@ -121,7 +121,7 @@ public class PmAssignedProjectReportServiceImpl extends UserLoginBaseService imp
 		projectDetails.setyTDRevenue(Utility.roundOffDoubleUpto2Places(totalRevenueAmountForYTD));
 		projectDetails.setRevenuePerFTE(Utility.roundOffDoubleUpto2Places(totalRevenueAmountForYTD/fTeForYTD));// checked
 		
-		projectDetails.setyTDPmPercent(Utility.roundOffDoubleUpto2Places((marginAmountForYTD / totalRevenueAmountForYTD)*100) + " %");		
+		projectDetails.setyTDPm(Utility.roundOffDoubleUpto2Places((marginAmountForYTD / totalRevenueAmountForYTD)*100) + " %");		
 		
 		projectDetails.setCostPerFTE(Utility.roundOffDoubleUpto2Places((totalRevenueAmountForYTD - marginAmountForYTD)/fTeForYTD));
 	}
@@ -139,15 +139,14 @@ public class PmAssignedProjectReportServiceImpl extends UserLoginBaseService imp
 			availableDaysSumForYTD = availableDaysSumForYTD + monthlyResourceUtilizationForYTD.getAvailableDays();
 		}
 		
-		projectDetails.setyTDUtilPercent(Utility.roundOffDoubleUpto2Places((billedDaysSumForYTD / availableDaysSumForYTD) * 100) + " %");
+		projectDetails.setyTDUtilization(Utility.roundOffDoubleUpto2Places((billedDaysSumForYTD / availableDaysSumForYTD) * 100) + " %");
 
 //Utilization for 2 month back from given toMonth
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(tFileUploadDate);
-		// Subtract 2 months from current date
-        calendar.add(Calendar.MONTH, -2);
-        Date twoMonthBackDate=calendar.getTime();
-		
+		// Subtract 2 months from current date		
+        calendar.add(Calendar.MONTH, -2);        
+        Date twoMonthBackDate=calendar.getTime();       
 		// Reinitialize for cleaning the staled data
 		billedDaysSumForYTD = 0;
 		availableDaysSumForYTD = 0;
@@ -159,8 +158,8 @@ public class PmAssignedProjectReportServiceImpl extends UserLoginBaseService imp
 			availableDaysSumForYTD = availableDaysSumForYTD + monthlyResourceUtilizationForYTD.getAvailableDays();
 		}
 		
-		projectDetails.setTwoMonthBackMonthUtilPercent(Utility.roundOffDoubleUpto2Places((billedDaysSumForYTD / availableDaysSumForYTD) * 100) + " % "
-				+ Utility.getMonthName(calendar.MONTH));
+		projectDetails.setUtilizationB4TwoMonth(Utility.roundOffDoubleUpto2Places((billedDaysSumForYTD / availableDaysSumForYTD) * 100) + " % "
+				+ " till "+Utility.getMonthName(calendar.get(calendar.MONTH)+1));
 
 		
 	}
@@ -170,16 +169,25 @@ public class PmAssignedProjectReportServiceImpl extends UserLoginBaseService imp
 	private void prepareAttrition(Integer projectCodeId, ProjectDetails projectDetails,Date fFileUploadDate,Date tFileUploadDate) {
 		// YTD Attrition calculation
 		double ytd_attrition_percent = calculateYTDAttritionPercent(projectCodeId, fFileUploadDate,tFileUploadDate);
-		projectDetails.setyTDAttritionPercent(ytd_attrition_percent + " %");
+		
+		projectDetails.setyTDAttrition(Utility.roundOffDoubleUpto2Places(ytd_attrition_percent) + " %");
 		// Attrition for current month. [total_exit_count/ Total_resource_count] for current month
 		Date currentMonthYearDate = tFileUploadDate;//Current mont will be considered as to date
-		
-		double currentMonthAttritionPercent = currentMonthAttritionPercent(projectCodeId, currentMonthYearDate);
+		//Here, from-date will be one month before the current date
 		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(tFileUploadDate);
+		// Subtract 1 month from current date		
+        calendar.add(Calendar.MONTH, -1);        
+        fFileUploadDate=calendar.getTime(); 
+		double currentMonthAttritionPercent = calculateYTDAttritionPercent(projectCodeId, fFileUploadDate,tFileUploadDate);
+				
+		calendar = Calendar.getInstance();
 		calendar.setTime(currentMonthYearDate);
-		projectDetails.setCurrentAttritionPercent(
-				currentMonthAttritionPercent + " % in " + Utility.getMonthName(calendar.MONTH));
+		projectDetails.setCurrentAttrition(
+				Utility.roundOffDoubleUpto2Places(currentMonthAttritionPercent)  + " % in " + Utility.getMonthName(calendar.get(calendar.MONTH)+1));
+		
 	}// End of prepareAttrition
+	
 	@Autowired
 	MonthlyResourceAllocationService monthlyResourceAllocationService;
 	private double calculateYTDAttritionPercent(Integer projectCodeId, Date fFileUploadDate,Date tFileUploadDate) {
@@ -187,32 +195,21 @@ public class PmAssignedProjectReportServiceImpl extends UserLoginBaseService imp
 				.getMonthlyResourceAttritionDataBetweenMonths(projectCodeId, fFileUploadDate,tFileUploadDate);
 		int total_exit_count = projectMonthlyResourceAttritionList.size();
 		
+		
 		List<ResourceAllocationModel> projectMonthlyResourceAllocationList = monthlyResourceAllocationService
 				.getMonthlyDistinctResourceAllocationBetweenMonths(projectCodeId, fFileUploadDate,tFileUploadDate);
-		int totalResourceAllocationCount = projectMonthlyResourceAllocationList.size();		
-		double ytd_attrition_percent = 0;
-		if(totalResourceAllocationCount!=0)
-		 ytd_attrition_percent = (total_exit_count / totalResourceAllocationCount) * 100;
-		return ytd_attrition_percent;
-	}
-
-	
-	private double currentMonthAttritionPercent(Integer projectCodeId, Date currentMonthYearDate) {
-
-		List<ProjectMonthlyResourceAttrition> monthlyResourceAttritionList = monthlyAttritionService
-				.getAMonthSpecificAttrition(projectCodeId, currentMonthYearDate);
-
-		List<ProjectMonthlyResourceAllocation> resourceAllocationForCurrentLMonthist = monthlyResourceAllocationService
-				.getDistinctResourceAllocationForCurrentMonth(projectCodeId, currentMonthYearDate);
-
-		int totalResourceAllocationCount = resourceAllocationForCurrentLMonthist.size();
-		int total_exit_count = monthlyResourceAttritionList.size();
 		
-		double currentMonthAttritionPercent = 0;
-		if(totalResourceAllocationCount>0)
-		 currentMonthAttritionPercent = (total_exit_count / totalResourceAllocationCount) * 100;	
+		int totalResourceAllocationCount = projectMonthlyResourceAllocationList.size();	
 		
-		return currentMonthAttritionPercent;
+		double ytd_attrition = 0;
+		if(totalResourceAllocationCount > 0) {		 
+		 //System.out.println("projectCodeId = "+projectCodeId);
+		 //System.out.println("total_exit_count = "+total_exit_count);
+		 //System.out.println("totalResourceAllocationCount = "+totalResourceAllocationCount);
+		 ytd_attrition = (double)total_exit_count / totalResourceAllocationCount;
+		// System.out.println("ytd_attrition = "+ytd_attrition);
+		}
+		return ytd_attrition*100;
 	}
 
 	// Here,Expected Increase P/M column data will be picked for RRRR [Potential
@@ -221,17 +218,21 @@ public class PmAssignedProjectReportServiceImpl extends UserLoginBaseService imp
 	@Autowired
 	MonthlyRRRService monthlyRRRService;
 	private void prepareRRRR(int projectCodeId, ProjectDetails projectDetails,Date fFileUploadDate,Date tFileUploadDate) {
+		
 		Integer expectedIncreasePMCount = monthlyRRRService.getExpectedIncreasePMCountFromRRRR(projectCodeId,fFileUploadDate,tFileUploadDate);
+		
 		projectDetails.setRrrrPotentialFTE(expectedIncreasePMCount);
+		
 		List<ProjectMonthlyRrrr>rRRRPotentialRevenuePerMonthList = monthlyRRRService.getRRRRPotentialRevenuePerMonth(projectCodeId, fFileUploadDate,tFileUploadDate);
 		double rRRRPotentialRevenuePerMonth = 0;
+	
 		for( ProjectMonthlyRrrr projectMonthlyRrrr:rRRRPotentialRevenuePerMonthList) {
 			rRRRPotentialRevenuePerMonth = rRRRPotentialRevenuePerMonth+projectMonthlyRrrr.getExpectedRate();
 		}
 		projectDetails.setRrrrPotentialRevenuePerMonth(rRRRPotentialRevenuePerMonth);		
 	}
 
-	// Here,
+	
 	@Autowired
 	MonthlyResourceAllocationRepo monthlyResourceAllocationRepo;
 	private void prepareAllocation(int projectCodeId, ProjectDetails projectDetails, Date fFileUploadDate,Date tFileUploadDate) {
@@ -250,16 +251,22 @@ public class PmAssignedProjectReportServiceImpl extends UserLoginBaseService imp
 				SumOfAllocationPercentFor_L = SumOfAllocationPercentFor_L+projectMonthlyResourceAllocation.getAllocationPercentage();
 			}
 		}//End of for loop
-		projectDetails.setSpan_1(((int)SumOfAllocationPercentFor_EandS + "")+":"+((int)SumOfAllocationPercentFor_M+""));
-		projectDetails.setSpan_2(((int)SumOfAllocationPercentFor_M + "")+":"+((int)SumOfAllocationPercentFor_L+""));
+		
+		projectDetails.setSpan_1(((int)SumOfAllocationPercentFor_EandS + "")+" : "+((int)SumOfAllocationPercentFor_M+""));
+		projectDetails.setSpan_2(((int)SumOfAllocationPercentFor_M + "")+" : "+((int)SumOfAllocationPercentFor_L+""));
+		//projectDetails.setSpan_1((SumOfAllocationPercentFor_EandS + "")+" : "+(SumOfAllocationPercentFor_M+""));
+		//projectDetails.setSpan_2((SumOfAllocationPercentFor_M + "")+" : "+(SumOfAllocationPercentFor_L+""));
 		
 		//X= SumFor_E&S / (SumFor_M+SumFor_L) this will go under Span RAG	
-		int spanRagCalculation = 0;
+		double spanRagCalculation = 0;
 		if((SumOfAllocationPercentFor_M + SumOfAllocationPercentFor_L)>0)
-		 spanRagCalculation = (int)(SumOfAllocationPercentFor_EandS/
-				                      (SumOfAllocationPercentFor_M + SumOfAllocationPercentFor_L));
+			
+		 spanRagCalculation = (SumOfAllocationPercentFor_EandS/
+				              (SumOfAllocationPercentFor_M + SumOfAllocationPercentFor_L)
+				              );
 		
-		projectDetails.setSpanRAGCalc(spanRagCalculation);
+		projectDetails.setSpanRAGCalc((int)spanRagCalculation);
+		
 		if(spanRagCalculation>10)
 			projectDetails.setSpanRagColourCode("Green");
 		else
@@ -269,9 +276,13 @@ public class PmAssignedProjectReportServiceImpl extends UserLoginBaseService imp
 	@Autowired
 	MonthlyConsolidatedDeliveryRiskService monthlyConsolidatedDeliveryRiskService;
 	private void prepareProjectRiskScore(int projectCodeId, ProjectDetails projectDetails,Date fFileUploadDate,Date tFileUploadDate) {
+		
 		List<ConsolidatedDeliveryRisk> consolidatedDeliveryRiskList =  monthlyConsolidatedDeliveryRiskService.getMonthlyConsolidatedDeliveryRiskBetweenMonths(projectCodeId,fFileUploadDate,tFileUploadDate);
-		//Here, there is a possibility of get multiple records. So, we will convert them as comma separated.
+		
+		//Here, there is a possibility of getting multiple records. So, we will convert them as comma separated.
+		
 		String customerDeliveryRiskScore = "_";
+		
 		for(ConsolidatedDeliveryRisk consolidatedDeliveryRisk:consolidatedDeliveryRiskList) {
 			if(consolidatedDeliveryRisk.getRiskPriorityNumber()==null)
 			    ;//Do nothing
@@ -284,8 +295,11 @@ public class PmAssignedProjectReportServiceImpl extends UserLoginBaseService imp
 	@Autowired
 	MonthlyCustomerSatisfactionService monthlyCustomerSatisfactionService;
 	private void prepareCustomerSatisfactionScore(int projectCodeId, ProjectDetails projectDetails, Date fFileUploadDate,Date tFileUploadDate) {
+		
 		List<CustomerSatisfaction> csustomerSatisfactionList= monthlyCustomerSatisfactionService.getMonthlyCustomerSatisfactionBetweenMonths(projectCodeId, fFileUploadDate,tFileUploadDate);
-		//Here, there is a possibility of get multiple records. So, we will convert them as comma separated
+		
+		//Here, there is a possibility of getting multiple records. So, we will convert them as comma separated
+		
 		String customerSatisfactionScore = "_";
 		for(CustomerSatisfaction customerSatisfaction:csustomerSatisfactionList) {
 			if(customerSatisfaction.getRating()==null)

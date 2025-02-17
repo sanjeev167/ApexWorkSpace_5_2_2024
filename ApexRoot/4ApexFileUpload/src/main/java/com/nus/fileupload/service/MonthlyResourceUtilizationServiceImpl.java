@@ -80,11 +80,11 @@ public class MonthlyResourceUtilizationServiceImpl extends UserLoginBaseService 
 						projectMonthlyResourceUtilization = new ProjectMonthlyResourceUtilization(fileUploadPayload.getFileUploadDate(), getCurrentLoginUserId(),currentDate,"Y" );
 						
 						if (row.getCell(billedDaysCellValue) != null && row.getCell(billedDaysCellValue).getCellType() == CellType.NUMERIC) {
-							projectMonthlyResourceUtilization.setBilledDays((int) row.getCell(billedDaysCellValue).getNumericCellValue());
+							projectMonthlyResourceUtilization.setBilledDays(row.getCell(billedDaysCellValue).getNumericCellValue());
 						}
 						
 						if (row.getCell(availableDaysCellValue) != null && row.getCell(availableDaysCellValue).getCellType() == CellType.NUMERIC) {
-							projectMonthlyResourceUtilization.setAvailableDays((int) row.getCell(availableDaysCellValue).getNumericCellValue());
+							projectMonthlyResourceUtilization.setAvailableDays(row.getCell(availableDaysCellValue).getNumericCellValue());
 						}				
 						
 						if (row.getCell(projectCodeCellNo) != null && row.getCell(projectCodeCellNo).getCellType() == CellType.STRING) {

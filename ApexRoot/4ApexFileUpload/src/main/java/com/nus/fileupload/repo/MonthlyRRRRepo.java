@@ -25,14 +25,14 @@ public interface MonthlyRRRRepo extends JpaRepository<ProjectMonthlyRrrr, Intege
 			                                       + " AND file_upload_date >=?2 AND file_upload_date <=?3", nativeQuery = true)	
 	List<ProjectMonthlyRrrr> getMonthlyRRRRBetweenMonths(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate);
 
-	@Query(value = "SELECT  COUNT(expected_rate) FROM project_monthly_rrrr WHERE project_code_id=?1"
+	@Query(value = "SELECT  COUNT(expected_increase_pm) FROM project_monthly_rrrr WHERE project_code_id=?1"
                                                + " AND file_upload_date >=?2 AND file_upload_date <=?3"
-                                               + " AND expected_rate>0", nativeQuery = true)
+                                               + " AND expected_increase_pm>0", nativeQuery = true)
 	Integer getMonthlyExpectedIncreasePM_RRRR(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate);
 
 	@Query(value = "SELECT  * FROM project_monthly_rrrr WHERE project_code_id=?1"
             + " AND file_upload_date >=?2 AND file_upload_date <=?3"
-            + " AND expected_rate>0", nativeQuery = true)
+            + " AND expected_increase_pm>0", nativeQuery = true)
 	List<ProjectMonthlyRrrr> getRRRRPotentialRevenuePerMonth(int projectCodeId,Date fFileUploadDate,Date tFileUploadDate);
 
 	

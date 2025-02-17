@@ -41,8 +41,8 @@ public class ProjectMonthlyRrrr implements Serializable {
     private Integer    id ;
 
     //--- ENTITY DATA FIELDS 
-    @Column(name="expected_rate")
-    private Double     expectedRate ;
+    @Column(name="expected_increase_pm")
+    private Double     expectedIncreasePM ;
 
     @Column(name="project_code_id", nullable=false)
     private Integer    projectCodeId ;
@@ -119,11 +119,11 @@ public class ProjectMonthlyRrrr implements Serializable {
         return this.id;
     }
 
-    public void setExpectedRate( Double expectedRate ) {
-        this.expectedRate = expectedRate ;
+    public void setExpectedIncreasePM( Double expectedIncreasePM ) {
+        this.expectedIncreasePM = expectedIncreasePM ;
     }
-    public Double getExpectedRate() {
-        return this.expectedRate;
+    public Double getExpectedIncreasePM() {
+        return this.expectedIncreasePM;
     }
 
     public void setProjectCodeId( Integer projectCodeId ) {
@@ -203,7 +203,7 @@ public class ProjectMonthlyRrrr implements Serializable {
         StringBuilder sb = new StringBuilder(); 
         sb.append(id);
         sb.append("|");
-        sb.append(expectedRate);
+        sb.append(expectedIncreasePM);
         sb.append("|");
         sb.append(projectCodeId);
         sb.append("|");

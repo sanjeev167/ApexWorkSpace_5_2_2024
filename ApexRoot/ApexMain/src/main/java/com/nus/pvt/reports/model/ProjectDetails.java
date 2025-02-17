@@ -25,8 +25,8 @@ public class ProjectDetails extends BaseModel {
 	private double revenuePerFTE;
 	private double costPerFTE;
 	
-	private String yTDUtilization;
-	private String utilizationB4TwoMonth;
+	private String yTDUtilization="0 %";;
+	private String utilizationB4TwoMonth="0 %";
 	private String yTDAttrition;
 	private String currentAttrition;
 	

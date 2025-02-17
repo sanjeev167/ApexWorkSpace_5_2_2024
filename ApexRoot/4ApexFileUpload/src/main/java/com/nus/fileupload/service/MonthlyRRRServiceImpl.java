@@ -57,7 +57,7 @@ public class MonthlyRRRServiceImpl extends UserLoginBaseService implements Month
 	@Override
 	public List<ProjectMonthlyRrrr> readExcel(FileUploadPayload fileUploadPayload) throws IOException {
 		
-		int expectedRateCellNo = 5;// Double		
+		int expectedIncreasePMCellNo = 6;// Double		
 		int projectCodeCellNo = 3; // String => checked
 
 		List<ProjectMonthlyRrrr> monthlyRRRRListReadFromExcel = new ArrayList<ProjectMonthlyRrrr>();
@@ -78,8 +78,8 @@ public class MonthlyRRRServiceImpl extends UserLoginBaseService implements Month
 							continue;
 						projectMonthlyRrrr = new ProjectMonthlyRrrr(fileUploadPayload.getFileUploadDate(), getCurrentLoginUserId(),"Y" );
 						
-						if (row.getCell(expectedRateCellNo) != null && row.getCell(expectedRateCellNo).getCellType() == CellType.NUMERIC) {
-							projectMonthlyRrrr.setExpectedRate(row.getCell(expectedRateCellNo).getNumericCellValue());							
+						if (row.getCell(expectedIncreasePMCellNo) != null && row.getCell(expectedIncreasePMCellNo).getCellType() == CellType.NUMERIC) {
+							projectMonthlyRrrr.setExpectedIncreasePM(row.getCell(expectedIncreasePMCellNo).getNumericCellValue());							
 						}
 												
 						if (row.getCell(projectCodeCellNo) != null && row.getCell(projectCodeCellNo).getCellType() == CellType.STRING) {
@@ -162,7 +162,7 @@ public class MonthlyRRRServiceImpl extends UserLoginBaseService implements Month
 		for(ProjectMonthlyRrrr projectMonthlyRrrr :readExistingMonthlyRRRRList) {			
 			   hprojectMonthlyRrrr = new HprojectMonthlyRrrr();		
 			   
-			   hprojectMonthlyRrrr.setExpectedRate(projectMonthlyRrrr.getExpectedRate());			   
+			   hprojectMonthlyRrrr.setExpectedIncreasePM(projectMonthlyRrrr.getExpectedIncreasePM());			   
 			   hprojectMonthlyRrrr.setProjectCodeId(projectMonthlyRrrr.getProjectCodeId());
 			   hprojectMonthlyRrrr.setFileUploadDate(projectMonthlyRrrr.getFileUploadDate());
 			  

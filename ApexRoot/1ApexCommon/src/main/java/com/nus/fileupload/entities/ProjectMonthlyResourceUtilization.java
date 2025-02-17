@@ -42,10 +42,10 @@ public class ProjectMonthlyResourceUtilization implements Serializable {
 
     //--- ENTITY DATA FIELDS 
     @Column(name="billed_days", nullable=false)
-    private Integer    billedDays ;
+    private Double    billedDays ;
 
     @Column(name="available_days", nullable=false)
-    private Integer    availableDays ;
+    private Double    availableDays ;
 
     @Column(name="project_code_id", nullable=false)
     private Integer    projectCodeId ;
@@ -123,17 +123,17 @@ public class ProjectMonthlyResourceUtilization implements Serializable {
         return this.id;
     }
 
-    public void setBilledDays( Integer billedDays ) {
+    public void setBilledDays( Double billedDays ) {
         this.billedDays = billedDays ;
     }
-    public Integer getBilledDays() {
+    public Double getBilledDays() {
         return this.billedDays;
     }
 
-    public void setAvailableDays( Integer availableDays ) {
+    public void setAvailableDays( Double availableDays ) {
         this.availableDays = availableDays ;
     }
-    public Integer getAvailableDays() {
+    public Double getAvailableDays() {
         return this.availableDays;
     }
 
